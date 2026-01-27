@@ -1,0 +1,179 @@
+export const mockCourses = [
+  {
+    id: '1',
+    title: 'Desenvolvimento Web Full Stack',
+    area: 'TI',
+    startDate: '2026-02-01',
+    duration: '3 meses',
+    free: true,
+    description: 'Aprenda HTML, CSS, JavaScript, React e Node.js',
+    spots: 50,
+  },
+  {
+    id: '2',
+    title: 'Marketing Digital Avançado',
+    area: 'Marketing',
+    startDate: '2026-02-15',
+    duration: '2 meses',
+    free: true,
+    description: 'SEO, SEM, redes sociais e análise de dados',
+    spots: 40,
+  },
+  {
+    id: '3',
+    title: 'UX/UI Design Profissional',
+    area: 'Design',
+    startDate: '2026-02-10',
+    duration: '2.5 meses',
+    free: false,
+    description: 'Figma, prototipagem, pesquisa de usuários',
+    spots: 30,
+  },
+];
+
+export const mockJobs = [
+  {
+    id: '1',
+    title: 'Desenvolvedor Frontend Júnior',
+    company: 'TechCorp',
+    location: 'São Paulo, SP',
+    type: 'Estágio',
+    area: 'TI',
+    match: 85,
+    requirements: ['React', 'JavaScript', 'CSS'],
+    salary: 'R$ 2.000 - R$ 2.500',
+  },
+  {
+    id: '2',
+    title: 'Analista de Marketing Digital',
+    company: 'Marketing Pro',
+    location: 'Rio de Janeiro, RJ',
+    type: 'Emprego',
+    area: 'Marketing',
+    match: 72,
+    requirements: ['Google Ads', 'Facebook Ads', 'Analytics'],
+    salary: 'R$ 3.500 - R$ 4.500',
+  },
+  {
+    id: '3',
+    title: 'Designer UI/UX',
+    company: 'Design Studio',
+    location: 'Remoto',
+    type: 'Estágio',
+    area: 'Design',
+    match: 90,
+    requirements: ['Figma', 'Adobe XD', 'Prototipagem'],
+    salary: 'R$ 2.200 - R$ 2.800',
+  },
+];
+
+export const mockCompanies = [
+  {
+    id: '1',
+    name: 'TechCorp',
+    openPositions: 15,
+    hires: 120,
+    verified: true,
+    logo: '🏢',
+  },
+  {
+    id: '2',
+    name: 'Marketing Pro',
+    openPositions: 8,
+    hires: 85,
+    verified: true,
+    logo: '📊',
+  },
+  {
+    id: '3',
+    name: 'Design Studio',
+    openPositions: 12,
+    hires: 95,
+    verified: true,
+    logo: '🎨',
+  },
+];
+
+export const mockAlerts = [
+  {
+    id: '1',
+    title: 'Novo curso de Python disponível',
+    message: 'Inscrições abertas até 20/01/2026',
+    type: 'course' as const,
+    date: '2026-01-13',
+    read: false,
+  },
+  {
+    id: '2',
+    title: '3 novas vagas compatíveis com seu perfil',
+    message: 'Veja as oportunidades em TI',
+    type: 'job' as const,
+    date: '2026-01-12',
+    read: false,
+  },
+  {
+    id: '3',
+    title: 'Prazo de candidatura terminando',
+    message: 'Candidature-se até amanhã para Desenvolvedor Frontend',
+    type: 'deadline' as const,
+    date: '2026-01-11',
+    read: true,
+  },
+];
+
+export const mockTimeline = [
+  {
+    id: '1',
+    stage: 'Curso',
+    title: 'Desenvolvimento Web',
+    status: 'completed' as const,
+    date: '15/12/2025',
+    progress: 100,
+  },
+  {
+    id: '2',
+    stage: 'Estágio',
+    title: 'Desenvolvedor Frontend',
+    status: 'in-progress' as const,
+    date: '10/01/2026',
+    progress: 40,
+  },
+  {
+    id: '3',
+    stage: 'Emprego',
+    title: 'Meta: Desenvolvedor Pleno',
+    status: 'pending' as const,
+    date: 'Estimado: 06/2026',
+    progress: 0,
+  },
+];
+
+export const mockMentors = [
+  {
+    id: '1',
+    name: 'Ana Silva',
+    role: 'Senior Developer',
+    area: 'TI',
+    experience: '10 anos',
+    avatar: '👩‍💻',
+    available: true,
+  },
+  {
+    id: '2',
+    name: 'Carlos Mendes',
+    role: 'Marketing Director',
+    area: 'Marketing',
+    experience: '8 anos',
+    avatar: '👨‍💼',
+    available: true,
+  },
+  {
+    id: '3',
+    name: 'Julia Santos',
+    role: 'Lead Designer',
+    area: 'Design',
+    experience: '7 anos',
+    avatar: '👩‍🎨',
+    available: false,
+  },
+];
