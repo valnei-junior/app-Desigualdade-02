@@ -38,6 +38,8 @@ export default defineConfig({
       'react': path.resolve(__dirname, './node_modules/react'),
       'react-dom': path.resolve(__dirname, './node_modules/react-dom'),
     },
+    // Ensure Vite uses a single copy of react/react-dom (prevents hooks errors)
+    dedupe: ['react', 'react-dom'],
   },
   base: './',
   build: {

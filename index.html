@@ -5,6 +5,26 @@
     <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Plataforma de Educação e Empregabilidade</title>
+    <!--
+      Content Security Policy:
+      - In development Vite uses eval for HMR; allow 'unsafe-eval' only during dev to avoid breaking HMR.
+      - In production, remove 'unsafe-eval' for security.
+    -->
+    <script>
+      (function () {
+        try {
+          var isDev = (window && window.location && window.location.hostname === 'localhost') || import.meta.env && import.meta.env.DEV;
+        } catch (e) { var isDev = false; }
+        var meta = document.createElement('meta');
+        meta.httpEquiv = 'Content-Security-Policy';
+        if (isDev) {
+          meta.content = "default-src 'self' 'unsafe-eval' 'unsafe-inline' data: blob: http: https:;";
+        } else {
+          meta.content = "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:;";
+        }
+        document.getElementsByTagName('head')[0].appendChild(meta);
+      })();
+    </script>
   </head>
   <body>
     <div id="root"></div>
