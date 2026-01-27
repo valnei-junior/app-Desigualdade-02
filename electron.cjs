@@ -1,3 +1,9 @@
+// During development we disable Electron security warnings to avoid
+// noisy messages while iterating. KEEP THIS ONLY FOR DEVELOPMENT.
+if (process.env.NODE_ENV !== 'production') {
+  process.env.ELECTRON_DISABLE_SECURITY_WARNINGS = 'true';
+}
+
 const { app, BrowserWindow } = require('electron');
 const path = require('path');
 
