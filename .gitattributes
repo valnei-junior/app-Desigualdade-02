@@ -1,0 +1,11 @@
+# Set default behavior to normalize text files
+* text=auto
+
+# Force LF for common text files (UNIX style)
+*.sh text eol=lf
+*.md  text eol=lf
+*.json text eol=lf
+
+# Force CRLF for Windows scripts
+*.ps1 text eol=crlf
+*.cmd  text eol=crlf
