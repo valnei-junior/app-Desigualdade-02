@@ -67,8 +67,13 @@ Este repositório contém um pequeno servidor de autenticação usado em desenvo
 Terminal 1 — iniciar servidor de autenticação (Express + SQLite):
 
 ```powershell
-cd "C:\Users\a92207984\Desktop\Projeto feito com Valnei e Wesley"
-npm run start:server
+# Entre na pasta do backend e instale dependências (uma só vez):
+cd "C:\Users\a92207984\Desktop\Projeto feito com Valnei e Wesley\server"
+npm install
+
+# Inicie o servidor em modo desenvolvimento (usa nodemon):
+npm run dev
+
 # O servidor será iniciado em http://localhost:4000 por padrão
 ```
 
@@ -90,10 +95,13 @@ Observações:
 
 ### Scripts úteis
 
-- `npm run start:server` — inicia o servidor de autenticação local (porta 4000)
-- `npm run dev` — inicia o Vite (frontend)
-- `npm run build` — build de produção (Vite)
-- `npm run electron:dev` — inicia o modo Electron (desktop)
+- Backend (dentro de `server/`):
+  - `npm run dev` — inicia o servidor de desenvolvimento (nodemon)
+  - `npm start` — inicia o servidor sem nodemon
+- Frontend (na raiz do projeto):
+  - `npm run dev` — inicia o Vite (frontend)
+  - `npm run build` — build de produção (Vite)
+  - `npm run electron:dev` — inicia o modo Electron (desktop)
 
 ### Healthcheck e testes rápidos de API
 
@@ -109,6 +117,8 @@ Endpoints importantes (desenvolvimento):
 - `POST /api/register` — registrar usuário (body JSON: `email`, `password`, `name`, ...)
 - `POST /api/login` — autenticar usuário (body JSON: `email`, `password`)
 - `POST /api/guest` — cria/retorna um usuário 'guest' (usado por botões de login rápido na UI)
+
+Observação: havia dois arquivos de servidor em `server/` (`index.cjs` e `index.js`). Para evitar confusão mantivemos apenas `index.cjs` (fonte de verdade) e removemos `index.js`. Use os comandos acima dentro de `server/`.
 
 Exemplo de curl para registro:
 

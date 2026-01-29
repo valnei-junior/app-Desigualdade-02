@@ -12,12 +12,20 @@
     -->
     <script>
       (function () {
+        // Avoid using `import.meta` in non-module inline scripts (not supported).
+        // Detect development by checking the location hostname and port used by Vite.
+        var isDev = false;
         try {
-          var isDev = (window && window.location && window.location.hostname === 'localhost') || import.meta.env && import.meta.env.DEV;
-        } catch (e) { var isDev = false; }
+          var host = window && window.location && window.location.hostname;
+          var port = window && window.location && window.location.port;
+          if (host === 'localhost' || host === '127.0.0.1' || port === '5173') {
+            isDev = true;
+          }
+        } catch (e) { isDev = false; }
         var meta = document.createElement('meta');
         meta.httpEquiv = 'Content-Security-Policy';
         if (isDev) {
+          // Allow unsafe-eval only in development for HMR. Remove before packaging.
           meta.content = "default-src 'self' 'unsafe-eval' 'unsafe-inline' data: blob: http: https:;";
         } else {
           meta.content = "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:;";
