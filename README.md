@@ -6,7 +6,7 @@ Plataforma completa de educação e empregabilidade com 13 telas específicas, i
 
 ## ✨ Recursos Principais
 
-- ✅ **13 Telas Completas** - Dashboard, Cursos, Vagas, Alertas, Timeline, Empresas, Perfil, Métricas, Gamificação, Mentoria, Suporte, Configurações, Cadastro
+- ✅ **15+ Telas Completas** - Dashboard, Cursos, Vagas, Alertas, Timeline, Empresas, Perfil, Métricas, Gamificação, Mentoria, Suporte, Configurações, Cadastro, Financeiro, Indicações
 - ✅ **Sistema de Hierarquia de Acesso** - 4 tipos de usuários com permissões diferenciadas
 - ✅ **Design Responsivo** - Otimizado para mobile e desktop
 - ✅ **Acessibilidade** - WCAG compliant com ferramentas de acessibilidade
@@ -14,6 +14,7 @@ Plataforma completa de educação e empregabilidade com 13 telas específicas, i
 - ✅ **Gamificação** - Pontos, badges e sistema de recompensas
 - ✅ **Match de Competências** - Sistema inteligente de compatibilidade
 - ✅ **Painel Admin** - Métricas (inscritos e cursos) + CRUD com abas e busca
+- ✅ **Empresa de Cursos Online** - Painel completo, Financeiro, Indicações e Página do Curso
 
 ## 🎯 Sistema de Hierarquia de Acesso ⭐ NOVO
 
@@ -66,27 +67,7 @@ pnpm install
 Você pode iniciar **backend + frontend** com um único comando na raiz:
 
 ```powershell
-<<<<<<< Updated upstream
-# Entre na pasta do backend e instale dependências (uma só vez):
-cd "C:\Users\a92207984\Desktop\Projeto feito com Valnei e Wesley\server"
-npm install
-
-# Inicie o servidor em modo desenvolvimento (usa nodemon):
-npm run dev
-
-# O servidor será iniciado em http://localhost:4000 por padrão
-```
-
-Terminal 2 — iniciar frontend (Vite):
-
-```powershell
-cd "C:\Users\a92207984\Desktop\Projeto feito com Valnei e Wesley"
-# Informe a URL da API e desabilite o plugin Electron durante o desenvolvimento local (opcional)
-$env:VITE_API_URL='http://localhost:4000'
-$env:DISABLE_ELECTRON='true'
-=======
 cd "D:\Desktop\Ultimo projeto de Valtemir\app-Desigualdade-"
->>>>>>> Stashed changes
 npm run dev
 ```
 
@@ -117,21 +98,11 @@ Observações:
 
 ### Scripts úteis
 
-<<<<<<< Updated upstream
-- Backend (dentro de `server/`):
-  - `npm run dev` — inicia o servidor de desenvolvimento (nodemon)
-  - `npm start` — inicia o servidor sem nodemon
-- Frontend (na raiz do projeto):
-  - `npm run dev` — inicia o Vite (frontend)
-  - `npm run build` — build de produção (Vite)
-  - `npm run electron:dev` — inicia o modo Electron (desktop)
-=======
 - `npm run dev` — inicia backend + frontend (concurrently)
 - `npm run start:backend` — inicia o servidor de autenticação local (porta 4000)
 - `npm run start:frontend` — inicia o frontend (Vite, sem Electron)
 - `npm run build` — build de produção (Vite)
 - `npm run electron:dev` — inicia o modo Electron (desktop)
->>>>>>> Stashed changes
 
 ### Healthcheck e testes rápidos de API
 
@@ -166,6 +137,7 @@ curl -X POST http://localhost:4000/api/register -H "Content-Type: application/js
 3. Selecione o tipo de conta:
    - **Estudante** - Para testar funcionalidades de aprendizado
    - **Empresa** - Para testar gestão de vagas
+  - **Empresa de Cursos Online** - Para testar gestão de cursos, financeiro e indicações
    - **Mentor** - Para testar mentoria
    - **Admin** - Para acesso total
 4. Preencha os dados
@@ -195,6 +167,19 @@ Na rota `/admin`, o administrador tem:
 - Senha: `123456`
 
 > Crie esta conta via cadastro antes de usar as credenciais.
+
+## 🎓 Empresa de Cursos Online
+
+Na rota `/cursos`, a empresa de cursos tem um painel completo com submenu e abas de página inteira:
+
+- **Cursos**: criação, edição e exclusão de cursos.
+- **Página do Curso**: detalhes do curso com turmas e alunos, matrícula única e status (aprovado/reprovado).
+- **Professores e Turmas**: cadastro e vínculo com cursos.
+- **Alunos**: acompanhamento de matrículas e progresso.
+- **Financeiro**: salários, pagamentos e alunos em dia/atrasados (`/financeiro`).
+- **Indicações**: envio direto de alunos para empresas parceiras (`/indicacoes`).
+
+> Observação: neste MVP, os dados usam `localStorage` no navegador.
 
 ## 🛠️ Tecnologias
 
@@ -339,14 +324,15 @@ Este é um sistema de **demonstração frontend**. Para uso em produção:
 - [x] Navegação adaptativa
 - [x] Cadastro inteligente
 - [x] Documentação completa
+- [x] Página de gestão de candidatos
+- [x] Página de gestão de alunos
+- [x] Painel administrativo completo
+- [x] Painel de empresa de cursos (financeiro, indicações e página do curso)
 
 ### 🚧 Em Desenvolvimento
-- [ ] Página de gestão de candidatos
-- [ ] Página de gestão de alunos
-- [ ] Painel administrativo completo
+- [ ] Backend com API (produção)
 
 ### 📋 Planejado
-- [ ] Backend com API
 - [ ] Autenticação JWT
 - [ ] OAuth (Google, LinkedIn)
 - [ ] Sistema de notificações
@@ -385,7 +371,7 @@ Para dúvidas sobre o sistema:
 ---
 
 **Versão**: 1.0.0  
-**Última Atualização**: 21 de Janeiro de 2026
+**Última Atualização**: 03 de Fevereiro de 2026
 
 ⭐ Se este projeto foi útil, considere dar uma estrela!
 
