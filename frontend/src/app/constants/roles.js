@@ -43,6 +43,7 @@ export const PERMISSIONS = {
   VIEW_MENTORSHIP: 'VIEW_MENTORSHIP',
   VIEW_SUPPORT: 'VIEW_SUPPORT',
   VIEW_SETTINGS: 'VIEW_SETTINGS',
+  VIEW_DONATIONS: 'VIEW_DONATIONS',
   
   // Cursos
   ENROLL_COURSES: 'ENROLL_COURSES',
@@ -85,6 +86,7 @@ export const ROLE_PERMISSIONS = {
     PERMISSIONS.VIEW_MENTORSHIP,
     PERMISSIONS.VIEW_SUPPORT,
     PERMISSIONS.VIEW_SETTINGS,
+    PERMISSIONS.VIEW_DONATIONS,
     PERMISSIONS.ENROLL_COURSES,
     PERMISSIONS.APPLY_JOBS,
     PERMISSIONS.REQUEST_MENTORSHIP,
@@ -97,6 +99,7 @@ export const ROLE_PERMISSIONS = {
     PERMISSIONS.VIEW_METRICS,
     PERMISSIONS.VIEW_SUPPORT,
     PERMISSIONS.VIEW_SETTINGS,
+    PERMISSIONS.VIEW_DONATIONS,
     PERMISSIONS.CREATE_JOBS,
     PERMISSIONS.EDIT_JOBS,
     PERMISSIONS.DELETE_JOBS,
@@ -111,6 +114,7 @@ export const ROLE_PERMISSIONS = {
     PERMISSIONS.VIEW_METRICS,
     PERMISSIONS.VIEW_SUPPORT,
     PERMISSIONS.VIEW_SETTINGS,
+    PERMISSIONS.VIEW_DONATIONS,
     PERMISSIONS.CREATE_COURSES,
     PERMISSIONS.EDIT_COURSES,
     PERMISSIONS.DELETE_COURSES,
@@ -133,6 +137,7 @@ export const ROLE_ROUTES = {
     '/gamificacao',
     '/mentoria',
     '/suporte',
+    '/doacoes',
     '/configuracoes',
   ],
   
@@ -143,6 +148,7 @@ export const ROLE_ROUTES = {
     '/perfil',
     '/metricas',
     '/suporte',
+    '/doacoes',
     '/configuracoes',
   ],
   
@@ -151,6 +157,7 @@ export const ROLE_ROUTES = {
     '/cursos',
     '/financeiro',
     '/indicacoes',
+    '/doacoes',
     '/perfil',
     '/metricas',
     '/suporte',
@@ -171,6 +178,7 @@ export const ROLE_ROUTES = {
     '/suporte',
     '/financeiro',
     '/indicacoes',
+    '/doacoes',
     '/configuracoes',
     '/admin',
     '/usuarios',

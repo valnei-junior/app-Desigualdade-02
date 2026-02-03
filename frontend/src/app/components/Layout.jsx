@@ -49,6 +49,7 @@ const navigation = [
   { name: 'Métricas', href: '/metricas', icon: BarChart3 },
   { name: 'Financeiro', href: '/financeiro', icon: DollarSign },
   { name: 'Indicações', href: '/indicacoes', icon: Users },
+  { name: 'Doações', href: '/doacoes', icon: Award },
   { name: 'Gamificação', href: '/gamificacao', icon: Award },
   { name: 'Administração', href: '/admin', icon: Shield },
   { name: 'Mentoria', href: '/mentoria', icon: Users },

@@ -32,6 +32,7 @@ import { SupportPage } from "@/app/components/SupportPage";
 import { SettingsPage } from "@/app/components/SettingsPage";
 import { FinancePage } from "@/app/components/FinancePage.jsx";
 import { StudentIndicationsPage } from "@/app/components/StudentIndicationsPage.jsx";
+import { DonationsPage } from "@/app/components/DonationsPage.jsx";
 import { CandidatesPage } from "@/app/components/CandidatesPage";
 import { AdminPage } from "@/app/components/AdminPage";
 
@@ -100,6 +101,7 @@ function AppRoutes() {
           <Route path="suporte" element={<RoleProtectedRoute path="/suporte"><SupportPage /></RoleProtectedRoute>} />
           <Route path="financeiro" element={<RoleProtectedRoute path="/financeiro"><FinancePage /></RoleProtectedRoute>} />
           <Route path="indicacoes" element={<RoleProtectedRoute path="/indicacoes"><StudentIndicationsPage /></RoleProtectedRoute>} />
+          <Route path="doacoes" element={<RoleProtectedRoute path="/doacoes"><DonationsPage /></RoleProtectedRoute>} />
           <Route path="configuracoes" element={<RoleProtectedRoute path="/configuracoes"><SettingsPage /></RoleProtectedRoute>} />
         </Route>
 

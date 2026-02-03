@@ -15,6 +15,7 @@ Plataforma completa de educação e empregabilidade com 13 telas específicas, i
 - ✅ **Match de Competências** - Sistema inteligente de compatibilidade
 - ✅ **Painel Admin** - Métricas (inscritos e cursos) + CRUD com abas e busca
 - ✅ **Empresa de Cursos Online** - Painel completo, Financeiro, Indicações e Página do Curso
+- ✅ **Doações por Perfil** - Página de doações com planos e permissões por tipo de usuário
 
 ## 🎯 Sistema de Hierarquia de Acesso ⭐ NOVO
 
@@ -168,6 +169,18 @@ Na rota `/admin`, o administrador tem:
 
 > Crie esta conta via cadastro antes de usar as credenciais.
 
+## 💝 Doações e Planos
+
+Rota: `/doacoes`
+
+- **Administrador**: visão total (arrecadação, histórico e relatórios).
+- **Estudante**: doação mensal recorrente e status de pagamento.
+- **Empresa**: mensalidade fixa de R$ 50 e histórico próprio.
+- **Prestador de Curso**: mensalidade fixa de R$ 50 e status próprio.
+- **PIX**: geração de QR Code para pagamento na própria página.
+
+> Apenas o administrador pode ver valores globais.
+
 ## 🎓 Empresa de Cursos Online
 
 Na rota `/cursos`, a empresa de cursos tem um painel completo com submenu e abas de página inteira:
@@ -314,6 +327,10 @@ Este é um sistema de **demonstração frontend**. Para uso em produção:
 - ✅ Não armazene dados sensíveis no localStorage
 - ✅ Use HTTPS
 - ✅ Implemente rate limiting
+
+## 🗄️ Modelo de Banco de Dados (exemplo)
+
+Veja o arquivo de referência em [backend/schema.sql](backend/schema.sql).
 
 ## 📝 Roadmap
 
