@@ -5,6 +5,7 @@ const UserContext = createContext(undefined);
 
 export function UserProvider({ children }) {
   const [user, setUser] = useState(null);
+  const apiBase = (import.meta && import.meta.env && import.meta.env.VITE_API_URL) || 'http://localhost:4000';
 
   // Carregar usuário do localStorage ao iniciar
   useEffect(() => {
@@ -33,6 +34,55 @@ export function UserProvider({ children }) {
     }
   }, [user]);
 
+  const registerUser = async (userData, password) => {
+    try {
+      const resp = await fetch(`${apiBase.replace(/\/+$/, '')}/api/register`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ ...userData, password }),
+      });
+      let json = null;
+      try { json = await resp.json(); } catch {}
+      if (resp.ok) {
+        setUser(json.user);
+        try {
+          const key = 'admin_users';
+          const raw = localStorage.getItem(key);
+          const list = raw ? JSON.parse(raw) : [];
+          const next = list.some((u) => u.email === json.user.email)
+            ? list.map((u) => (u.email === json.user.email ? json.user : u))
+            : [...list, json.user];
+          localStorage.setItem(key, JSON.stringify(next));
+        } catch {}
+        return { ok: true };
+      }
+      console.error('API register error', json);
+      return { ok: false, error: json?.error || 'Não foi possível criar a conta. Verifique os dados.' };
+    } catch (err) {
+      console.error('API register failed', err);
+      return { ok: false, error: 'Servidor indisponível. Verifique se o backend está rodando.' };
+    }
+  };
+
+  const loginWithCredentials = async (email, password) => {
+    try {
+      const resp = await fetch(`${apiBase.replace(/\/+$/, '')}/api/login`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password }),
+      });
+      const json = await resp.json();
+      if (resp.ok) {
+        setUser(json.user);
+        return true;
+      }
+      return false;
+    } catch (err) {
+      console.error('API login failed', err);
+      return false;
+    }
+  };
+
   const login = (userData) => {
     // Validar role antes de fazer login
     if (!userData.role) {
@@ -57,8 +107,8 @@ export function UserProvider({ children }) {
 
   const updateUser = (updates) => {
     if (user) {
-      // Não permitir mudança de role através do updateUser
-      if (updates.role && updates.role !== user.role) {
+      // Permitir definir role apenas se o usuário ainda não tiver um
+      if (updates.role && user.role && updates.role !== user.role) {
         console.warn('Não é permitido mudar o role através de updateUser');
         delete updates.role;
       }
@@ -93,6 +143,8 @@ export function UserProvider({ children }) {
   const value = {
     user,
     login,
+    registerUser,
+    loginWithCredentials,
     logout,
     updateUser,
     isAuthenticated: !!user,

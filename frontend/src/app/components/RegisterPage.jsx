@@ -14,7 +14,7 @@ import { ROLES, ROLE_LABELS, ROLE_DESCRIPTIONS } from '@/app/constants/roles';
 
 export function RegisterPage() {
   const navigate = useNavigate();
-  const { login } = useUser();
+  const { login, registerUser } = useUser();
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -70,9 +70,9 @@ export function RegisterPage() {
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    
+
     if (!validateForm()) return;
 
     const userData = {
@@ -111,9 +111,18 @@ export function RegisterPage() {
     }
 
     // Register user with password (uses registerUser which persists and logs in)
-    const { registerUser } = useUser();
-    registerUser(userData, formData.password);
-    navigate('/dashboard');
+    try {
+      const result = await registerUser(userData, formData.password);
+      const ok = typeof result === 'boolean' ? result : result?.ok;
+      if (ok) {
+        navigate('/dashboard');
+      } else {
+        setErrors({ general: result?.error || 'Não foi possível criar a conta. Verifique os dados.' });
+      }
+    } catch (err) {
+      setErrors({ general: 'Erro de servidor ao criar conta.' });
+      console.error('register error', err);
+    }
   };
 
   const getRoleIcon = (role) => {

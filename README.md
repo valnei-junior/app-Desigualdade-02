@@ -13,6 +13,7 @@ Plataforma completa de educação e empregabilidade com 13 telas específicas, i
 - ✅ **Modo Escuro/Claro** - Sistema de temas completo
 - ✅ **Gamificação** - Pontos, badges e sistema de recompensas
 - ✅ **Match de Competências** - Sistema inteligente de compatibilidade
+- ✅ **Painel Admin** - Métricas (inscritos e cursos) + CRUD com abas e busca
 
 ## 🎯 Sistema de Hierarquia de Acesso ⭐ NOVO
 
@@ -62,11 +63,10 @@ pnpm install
 
 ### Execução (desenvolvimento)
 
-Este repositório contém um pequeno servidor de autenticação usado em desenvolvimento (`server/index.cjs`) e a aplicação frontend (Vite). Recomendo abrir dois terminais.
-
-Terminal 1 — iniciar servidor de autenticação (Express + SQLite):
+Você pode iniciar **backend + frontend** com um único comando na raiz:
 
 ```powershell
+<<<<<<< Updated upstream
 # Entre na pasta do backend e instale dependências (uma só vez):
 cd "C:\Users\a92207984\Desktop\Projeto feito com Valnei e Wesley\server"
 npm install
@@ -84,17 +84,40 @@ cd "C:\Users\a92207984\Desktop\Projeto feito com Valnei e Wesley"
 # Informe a URL da API e desabilite o plugin Electron durante o desenvolvimento local (opcional)
 $env:VITE_API_URL='http://localhost:4000'
 $env:DISABLE_ELECTRON='true'
+=======
+cd "D:\Desktop\Ultimo projeto de Valtemir\app-Desigualdade-"
+>>>>>>> Stashed changes
 npm run dev
 ```
 
-Após isso, abra o navegador em `http://localhost:5173`.
+Ou, se preferir em **terminais separados**:
+
+Terminal 1 — backend (Express + SQLite):
+
+```powershell
+cd "D:\Desktop\Ultimo projeto de Valtemir\app-Desigualdade-\backend"
+npm run start
+# O servidor será iniciado em http://localhost:4000 por padrão
+```
+
+Terminal 2 — frontend (Vite, sem Electron):
+
+```powershell
+cd "D:\Desktop\Ultimo projeto de Valtemir\app-Desigualdade-\frontend"
+$env:DISABLE_ELECTRON='true'
+npx vite
+```
+
+Após isso, abra o navegador na URL informada pelo Vite (ex: http://localhost:5173 ou 5174).
 
 Observações:
 - Se preferir, coloque `VITE_API_URL=http://localhost:4000` em um arquivo `.env` na raiz e reinicie o dev server.
-- O plugin Electron pode iniciar processos adicionais durante `vite dev`. Ao definir `DISABLE_ELECTRON=true` (ou exportar essa variável) o plugin é desabilitado para facilitar desenvolvimento web.
+- O plugin Electron pode iniciar processos adicionais durante `vite dev`. Ao definir `DISABLE_ELECTRON=true` o plugin é desabilitado para facilitar desenvolvimento web.
+- Há tarefas do VS Code em `.vscode/tasks.json` para abrir backend e frontend em terminais separados (tarefa “Run All”).
 
 ### Scripts úteis
 
+<<<<<<< Updated upstream
 - Backend (dentro de `server/`):
   - `npm run dev` — inicia o servidor de desenvolvimento (nodemon)
   - `npm start` — inicia o servidor sem nodemon
@@ -102,6 +125,13 @@ Observações:
   - `npm run dev` — inicia o Vite (frontend)
   - `npm run build` — build de produção (Vite)
   - `npm run electron:dev` — inicia o modo Electron (desktop)
+=======
+- `npm run dev` — inicia backend + frontend (concurrently)
+- `npm run start:backend` — inicia o servidor de autenticação local (porta 4000)
+- `npm run start:frontend` — inicia o frontend (Vite, sem Electron)
+- `npm run build` — build de produção (Vite)
+- `npm run electron:dev` — inicia o modo Electron (desktop)
+>>>>>>> Stashed changes
 
 ### Healthcheck e testes rápidos de API
 
@@ -142,6 +172,29 @@ curl -X POST http://localhost:4000/api/register -H "Content-Type: application/js
 5. Clique em "Criar Conta"
 
 Para instruções detalhadas, veja [COMO_TESTAR_ROLES.md](./COMO_TESTAR_ROLES.md)
+
+## 🛡️ Painel Admin
+
+Na rota `/admin`, o administrador tem:
+
+- **Métricas**: total de estudantes, empresas e cursos.
+- **CRUD** com **abas**: Estudantes, Empresas e Cursos.
+- **Busca** por nome/e-mail/área (usuários) e título/área/duração (cursos).
+
+> Observação: neste MVP, os dados do painel Admin usam `localStorage` no navegador.
+
+### Como acessar o Admin
+
+1. Crie uma conta com o tipo **Admin** na tela de cadastro.
+2. Faça login.
+3. Abra a rota `/admin` ou clique em **Administração** no menu lateral.
+
+#### Exemplo de credenciais (teste local)
+
+- E-mail: `admin@local.test`
+- Senha: `123456`
+
+> Crie esta conta via cadastro antes de usar as credenciais.
 
 ## 🛠️ Tecnologias
 
@@ -335,3 +388,13 @@ Para dúvidas sobre o sistema:
 **Última Atualização**: 21 de Janeiro de 2026
 
 ⭐ Se este projeto foi útil, considere dar uma estrela!
+
+
+
+cd "d:\Desktop\Ultimo projeto de Valtemir\app-Desigualdade-\backend"
+npm run start
+
+
+cd "d:\Desktop\Ultimo projeto de Valtemir\app-Desigualdade-\frontend"
+$env:DISABLE_ELECTRON="true"
+npx vite

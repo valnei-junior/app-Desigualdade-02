@@ -9,21 +9,19 @@ import electronRenderer from 'vite-plugin-electron-renderer';
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 export default defineConfig({
+  root: path.resolve(__dirname, '.'),
   plugins: [
     react(),
     tailwindcss(),
-    // Electron plugin can spawn/kill processes during dev. Disable it by
-    // setting the environment variable `DISABLE_ELECTRON=true` when running
-    // `npm run dev` to isolate Vite from Electron behavior.
     ...(process.env.DISABLE_ELECTRON === 'true'
       ? []
       : [
           electron([
             {
-              entry: 'electron.cjs',
+              entry: path.resolve(__dirname, '../electron.cjs'),
             },
             {
-              entry: 'preload.cjs',
+              entry: path.resolve(__dirname, '../preload.cjs'),
               onstart(options) {
                 options.reload();
               },
@@ -35,10 +33,9 @@ export default defineConfig({
   resolve: {
     alias: {
       '@': path.resolve(__dirname, './src'),
-      'react': path.resolve(__dirname, './node_modules/react'),
+      react: path.resolve(__dirname, './node_modules/react'),
       'react-dom': path.resolve(__dirname, './node_modules/react-dom'),
     },
-    // Ensure Vite uses a single copy of react/react-dom (prevents hooks errors)
     dedupe: ['react', 'react-dom'],
   },
   base: './',

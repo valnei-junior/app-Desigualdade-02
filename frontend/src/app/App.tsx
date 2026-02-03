@@ -20,6 +20,7 @@ import { LoginPage } from "@/app/components/LoginPage";
 import { Layout } from "@/app/components/Layout";
 import { Dashboard } from "@/app/components/Dashboard";
 import { CoursesPage } from "@/app/components/CoursesPage";
+import { CourseDetailsPage } from "@/app/components/CourseDetailsPage";
 import { JobsPage } from "@/app/components/JobsPage";
 import { AlertsPage } from "@/app/components/AlertsPage";
 import { TimelinePage } from "@/app/components/TimelinePage";
@@ -30,6 +31,7 @@ import { GamificationPage } from "@/app/components/GamificationPage";
 import { MentorshipPage } from "@/app/components/MentorshipPage";
 import { SupportPage } from "@/app/components/SupportPage";
 import { SettingsPage } from "@/app/components/SettingsPage";
+import { FinancePage } from "@/app/components/FinancePage";
 
 function ProtectedRoute({
   children,
@@ -68,6 +70,7 @@ function AppRoutes() {
         >
           <Route path="dashboard" element={<Dashboard />} />
           <Route path="cursos" element={<CoursesPage />} />
+          <Route path="cursos/:courseId" element={<CourseDetailsPage />} />
           <Route path="vagas" element={<JobsPage />} />
           <Route path="alertas" element={<AlertsPage />} />
           <Route
@@ -83,6 +86,7 @@ function AppRoutes() {
           />
           <Route path="mentoria" element={<MentorshipPage />} />
           <Route path="suporte" element={<SupportPage />} />
+          <Route path="financeiro" element={<FinancePage />} />
           <Route path="configuracoes" element={<SettingsPage />} />
         </Route>
 

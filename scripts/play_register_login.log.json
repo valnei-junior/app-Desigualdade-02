@@ -1,0 +1,52 @@
+{
+  "logs": [
+    {
+      "type": "debug",
+      "text": "[vite] connecting..."
+    },
+    {
+      "type": "debug",
+      "text": "[vite] connected."
+    },
+    {
+      "type": "info",
+      "text": "%cDownload the React DevTools for a better development experience: https://reactjs.org/link/react-devtools font-weight:bold"
+    },
+    {
+      "type": "error",
+      "text": "API register failed TypeError: Failed to fetch\n    at registerUser (http://localhost:5173/src/app/contexts/UserContext.jsx:48:26)\n    at handleSubmit (http://localhost:5173/src/app/components/RegisterPage.jsx:119:24)\n    at HTMLUnknownElement.callCallback2 (http://localhost:5173/node_modules/.vite/deps/chunk-NXESFFTV.js?v=d18ef6eb:3680:22)\n    at Object.invokeGuardedCallbackDev (http://localhost:5173/node_modules/.vite/deps/chunk-NXESFFTV.js?v=d18ef6eb:3705:24)\n    at invokeGuardedCallback (http://localhost:5173/node_modules/.vite/deps/chunk-NXESFFTV.js?v=d18ef6eb:3739:39)\n    at invokeGuardedCallbackAndCatchFirstError (http://localhost:5173/node_modules/.vite/deps/chunk-NXESFFTV.js?v=d18ef6eb:3742:33)\n    at executeDispatch (http://localhost:5173/node_modules/.vite/deps/chunk-NXESFFTV.js?v=d18ef6eb:7046:11)\n    at processDispatchQueueItemsInOrder (http://localhost:5173/node_modules/.vite/deps/chunk-NXESFFTV.js?v=d18ef6eb:7066:15)\n    at processDispatchQueue (http://localhost:5173/node_modules/.vite/deps/chunk-NXESFFTV.js?v=d18ef6eb:7075:13)\n    at dispatchEventsForPlugins (http://localhost:5173/node_modules/.vite/deps/chunk-NXESFFTV.js?v=d18ef6eb:7083:11)"
+    },
+    {
+      "type": "debug",
+      "text": "[vite] connecting..."
+    },
+    {
+      "type": "debug",
+      "text": "[vite] connected."
+    },
+    {
+      "type": "info",
+      "text": "%cDownload the React DevTools for a better development experience: https://reactjs.org/link/react-devtools font-weight:bold"
+    },
+    {
+      "type": "error",
+      "text": "Failed to load resource: net::ERR_CONNECTION_REFUSED"
+    },
+    {
+      "type": "error",
+      "text": "API login failed TypeError: Failed to fetch\n    at loginWithCredentials (http://localhost:5173/src/app/contexts/UserContext.jsx:67:26)\n    at http://localhost:5173/src/app/components/LoginPage.tsx:35:24\n    at handleSubmit (http://localhost:5173/src/app/components/LoginPage.tsx:41:7)\n    at HTMLUnknownElement.callCallback2 (http://localhost:5173/node_modules/.vite/deps/chunk-NXESFFTV.js?v=d18ef6eb:3680:22)\n    at Object.invokeGuardedCallbackDev (http://localhost:5173/node_modules/.vite/deps/chunk-NXESFFTV.js?v=d18ef6eb:3705:24)\n    at invokeGuardedCallback (http://localhost:5173/node_modules/.vite/deps/chunk-NXESFFTV.js?v=d18ef6eb:3739:39)\n    at invokeGuardedCallbackAndCatchFirstError (http://localhost:5173/node_modules/.vite/deps/chunk-NXESFFTV.js?v=d18ef6eb:3742:33)\n    at executeDispatch (http://localhost:5173/node_modules/.vite/deps/chunk-NXESFFTV.js?v=d18ef6eb:7046:11)\n    at processDispatchQueueItemsInOrder (http://localhost:5173/node_modules/.vite/deps/chunk-NXESFFTV.js?v=d18ef6eb:7066:15)\n    at processDispatchQueue (http://localhost:5173/node_modules/.vite/deps/chunk-NXESFFTV.js?v=d18ef6eb:7075:13)"
+    }
+  ],
+  "pageErrors": [],
+  "requestFailures": [
+    {
+      "url": "http://localhost:4000/api/register",
+      "failure": "net::ERR_ABORTED"
+    },
+    {
+      "url": "http://localhost:4000/api/login",
+      "failure": "net::ERR_CONNECTION_REFUSED"
+    }
+  ],
+  "timestamp": "2026-02-02T13:58:11.953Z"
+}

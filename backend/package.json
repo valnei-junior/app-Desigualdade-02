@@ -1,15 +1,16 @@
 {
-  "name": "project-backend",
+  "name": "app-Desigualdade-backend",
   "version": "0.0.1",
-  "main": "index.cjs",
+  "private": true,
+  "main": "server/index.cjs",
   "scripts": {
-    "start": "node index.cjs",
-    "dev": "nodemon index.cjs"
+    "start": "node server/index.cjs",
+    "start:dev": "nodemon server/index.cjs"
   },
   "dependencies": {
-    "express": "^5.2.1",
-    "cors": "^2.8.6",
     "bcryptjs": "^3.0.3",
+    "cors": "^2.8.6",
+    "express": "^5.2.1",
     "sqlite3": "^5.1.7"
   },
   "devDependencies": {

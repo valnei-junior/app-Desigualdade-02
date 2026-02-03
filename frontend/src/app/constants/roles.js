@@ -149,6 +149,8 @@ export const ROLE_ROUTES = {
   [ROLES.COURSE_PROVIDER]: [
     '/dashboard',
     '/cursos',
+    '/financeiro',
+    '/indicacoes',
     '/perfil',
     '/metricas',
     '/suporte',
@@ -167,6 +169,8 @@ export const ROLE_ROUTES = {
     '/gamificacao',
     '/mentoria',
     '/suporte',
+    '/financeiro',
+    '/indicacoes',
     '/configuracoes',
     '/admin',
     '/usuarios',

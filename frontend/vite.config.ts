@@ -2,18 +2,42 @@ import { defineConfig } from 'vite'
 import path from 'path'
 import tailwindcss from '@tailwindcss/vite'
 import react from '@vitejs/plugin-react'
+import electron from 'vite-plugin-electron'
+import electronRenderer from 'vite-plugin-electron-renderer'
 
 export default defineConfig({
+  root: path.resolve(__dirname, '.'),
   plugins: [
-    // The React and Tailwind plugins are both required for Make, even if
-    // Tailwind is not being actively used – do not remove them
     react(),
     tailwindcss(),
+    ...(process.env.DISABLE_ELECTRON === 'true'
+      ? []
+      : [
+          electron([
+            {
+              entry: path.resolve(__dirname, '../electron.cjs'),
+            },
+            {
+              entry: path.resolve(__dirname, '../preload.cjs'),
+              onstart(options) {
+                options.reload()
+              },
+            },
+          ]),
+        ]),
+    electronRenderer(),
   ],
   resolve: {
     alias: {
-      // Alias @ to the src directory
       '@': path.resolve(__dirname, './src'),
+      react: path.resolve(__dirname, './node_modules/react'),
+      'react-dom': path.resolve(__dirname, './node_modules/react-dom'),
     },
+    dedupe: ['react', 'react-dom'],
+  },
+  base: './',
+  build: {
+    outDir: 'dist',
+    emptyOutDir: true,
   },
 })

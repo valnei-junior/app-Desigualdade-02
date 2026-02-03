@@ -15,9 +15,11 @@ import { Toaster } from "@/app/components/ui/sonner";
 // Pages
 import { WelcomePage } from "@/app/components/WelcomePage";
 import { RegisterPage } from "@/app/components/RegisterPage.jsx";
+import { LoginPage } from "@/app/components/LoginPage";
 import { Layout } from "@/app/components/Layout";
 import { Dashboard } from "@/app/components/Dashboard";
 import { CoursesPage } from "@/app/components/CoursesPage";
+import { CourseDetailsPage } from "@/app/components/CourseDetailsPage.jsx";
 import { JobsPage } from "@/app/components/JobsPage";
 import { AlertsPage } from "@/app/components/AlertsPage";
 import { TimelinePage } from "@/app/components/TimelinePage";
@@ -28,7 +30,10 @@ import { GamificationPage } from "@/app/components/GamificationPage";
 import { MentorshipPage } from "@/app/components/MentorshipPage";
 import { SupportPage } from "@/app/components/SupportPage";
 import { SettingsPage } from "@/app/components/SettingsPage";
+import { FinancePage } from "@/app/components/FinancePage.jsx";
+import { StudentIndicationsPage } from "@/app/components/StudentIndicationsPage.jsx";
 import { CandidatesPage } from "@/app/components/CandidatesPage";
+import { AdminPage } from "@/app/components/AdminPage";
 
 function ProtectedRoute({ children }) {
   const { isAuthenticated } = useUser();
@@ -62,6 +67,7 @@ function AppRoutes() {
         {/* Public Routes */}
         <Route path="/" element={<WelcomePage />} />
         <Route path="/cadastro" element={<RegisterPage />} />
+        <Route path="/login" element={<LoginPage />} />
 
         {/* Protected Routes */}
         <Route
@@ -74,6 +80,7 @@ function AppRoutes() {
         >
           <Route path="dashboard" element={<RoleProtectedRoute path="/dashboard"><Dashboard /></RoleProtectedRoute>} />
           <Route path="cursos" element={<RoleProtectedRoute path="/cursos"><CoursesPage /></RoleProtectedRoute>} />
+          <Route path="cursos/:courseId" element={<RoleProtectedRoute path="/cursos"><CourseDetailsPage /></RoleProtectedRoute>} />
           <Route path="vagas" element={<RoleProtectedRoute path="/vagas"><JobsPage /></RoleProtectedRoute>} />
           <Route path="candidatos" element={<RoleProtectedRoute path="/candidatos"><CandidatesPage /></RoleProtectedRoute>} />
           <Route path="alertas" element={<RoleProtectedRoute path="/alertas"><AlertsPage /></RoleProtectedRoute>} />
@@ -88,8 +95,11 @@ function AppRoutes() {
             path="gamificacao"
             element={<RoleProtectedRoute path="/gamificacao"><GamificationPage /></RoleProtectedRoute>}
           />
+          <Route path="admin" element={<RoleProtectedRoute path="/admin"><AdminPage /></RoleProtectedRoute>} />
           <Route path="mentoria" element={<RoleProtectedRoute path="/mentoria"><MentorshipPage /></RoleProtectedRoute>} />
           <Route path="suporte" element={<RoleProtectedRoute path="/suporte"><SupportPage /></RoleProtectedRoute>} />
+          <Route path="financeiro" element={<RoleProtectedRoute path="/financeiro"><FinancePage /></RoleProtectedRoute>} />
+          <Route path="indicacoes" element={<RoleProtectedRoute path="/indicacoes"><StudentIndicationsPage /></RoleProtectedRoute>} />
           <Route path="configuracoes" element={<RoleProtectedRoute path="/configuracoes"><SettingsPage /></RoleProtectedRoute>} />
         </Route>
 

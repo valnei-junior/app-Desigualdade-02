@@ -88,102 +88,28 @@ export function WelcomePage() {
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-3 md:space-y-4">
-          <Button
-            onClick={() => navigate('/cadastro')}
-            className="w-full h-10 md:h-11 text-sm md:text-base"
-            size="lg"
-          >
-            Cadastrar-se
-          </Button>
+          <div className="space-y-3">
+            <Button
+              onClick={() => navigate('/cadastro')}
+              className="w-full h-10 md:h-11 text-sm md:text-base"
+              size="lg"
+            >
+              Cadastrar-se
+            </Button>
 
-          <div className="relative">
-            <div className="absolute inset-0 flex items-center">
-              <span className="w-full border-t" />
-            </div>
-            <div className="relative flex justify-center text-xs uppercase">
-              <span className="bg-white px-2 text-muted-foreground">
-                Entrar como (Demo)
-              </span>
-            </div>
+            <Button
+              onClick={() => navigate('/login')}
+              variant="ghost"
+              className="w-full h-10 md:h-11 text-sm md:text-base"
+              size="lg"
+            >
+              Entrar
+            </Button>
+
+            <p className="text-center text-xs text-muted-foreground pt-2">
+              Para acessar a plataforma, por favor faça login ou cadastre-se.
+            </p>
           </div>
-
-          {/* Opções de Login Rápido */}
-          <div className="space-y-2">
-            <Button
-              onClick={handleQuickLoginStudent}
-              variant="outline"
-              className="w-full h-10 text-sm flex items-center justify-start gap-2"
-            >
-              <GraduationCap className="h-4 w-4" />
-              Estudante
-            </Button>
-            
-            <Button
-              onClick={handleQuickLoginCompany}
-              variant="outline"
-              className="w-full h-10 text-sm flex items-center justify-start gap-2"
-            >
-              <Building2 className="h-4 w-4" />
-              Empresa / Recrutador
-            </Button>
-            
-            <Button
-              onClick={handleQuickLoginCourseProvider}
-              variant="outline"
-              className="w-full h-10 text-sm flex items-center justify-start gap-2"
-            >
-              <BookOpen className="h-4 w-4" />
-              Provedor de Cursos
-            </Button>
-            
-            <Button
-              onClick={handleQuickLoginAdmin}
-              variant="outline"
-              className="w-full h-10 text-sm flex items-center justify-start gap-2"
-            >
-              <Shield className="h-4 w-4" />
-              Administrador
-            </Button>
-          </div>
-
-          <div className="relative">
-            <div className="absolute inset-0 flex items-center">
-              <span className="w-full border-t" />
-            </div>
-            <div className="relative flex justify-center text-xs uppercase">
-              <span className="bg-white px-2 text-muted-foreground">
-                Ou continuar com
-              </span>
-            </div>
-          </div>
-
-          <div className="grid grid-cols-3 gap-2 md:gap-3">
-            <Button
-              variant="outline"
-              className="w-full h-10 md:h-11"
-              onClick={() => alert('Integração com LinkedIn em breve!')}
-            >
-              <Linkedin className="h-4 w-4 md:h-5 md:w-5" />
-            </Button>
-            <Button
-              variant="outline"
-              className="w-full h-10 md:h-11"
-              onClick={() => alert('Integração com Email em breve!')}
-            >
-              <Mail className="h-4 w-4 md:h-5 md:w-5" />
-            </Button>
-            <Button
-              variant="outline"
-              className="w-full h-10 md:h-11"
-              onClick={() => alert('Integração com Telefone em breve!')}
-            >
-              <Phone className="h-4 w-4 md:h-5 md:w-5" />
-            </Button>
-          </div>
-
-          <p className="text-center text-xs text-muted-foreground pt-2">
-            Cadastro rápido e simples. Seus dados são seguros.
-          </p>
         </CardContent>
       </Card>
     </div>

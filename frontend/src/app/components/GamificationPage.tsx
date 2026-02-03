@@ -54,7 +54,7 @@ export function GamificationPage() {
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <p className="text-4xl font-bold">{user?.badges.length || 0}/{badges.length}</p>
+            <p className="text-4xl font-bold">{user?.badges?.length || 0}/{badges.length}</p>
             <p className="text-sm text-muted-foreground mt-2">Badges conquistados</p>
           </CardContent>
         </Card>
