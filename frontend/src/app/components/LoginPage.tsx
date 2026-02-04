@@ -28,14 +28,9 @@ export function LoginPage() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center p-4">
       <Card className="w-full max-w-md">
-        <CardHeader className="pb-2 flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <Button type="button" variant="outline" onClick={() => navigate(-1)}>Voltar</Button>
-            <div>
-              <CardTitle className="text-xl">Entrar</CardTitle>
-              <CardDescription className="text-sm">Use seu e-mail e senha para entrar</CardDescription>
-            </div>
-          </div>
+        <CardHeader className="pb-2">
+          <CardTitle className="text-xl">Entrar</CardTitle>
+          <CardDescription className="text-sm">Use seu e-mail e senha para entrar</CardDescription>
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSubmit} className="space-y-4">
@@ -52,6 +47,7 @@ export function LoginPage() {
             {error && <p className="text-sm text-red-600">{error}</p>}
 
             <div className="flex gap-3">
+              <Button type="button" variant="outline" onClick={() => navigate(-1)}>Voltar</Button>
               <Button type="submit" className="flex-1">Entrar</Button>
               <Button type="button" variant="outline" onClick={() => navigate('/cadastro')}>Cadastrar</Button>
             </div>
