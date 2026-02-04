@@ -28,9 +28,14 @@ export function LoginPage() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center p-4">
       <Card className="w-full max-w-md">
-        <CardHeader className="pb-2">
-          <CardTitle className="text-xl">Entrar</CardTitle>
-          <CardDescription className="text-sm">Use seu e-mail e senha para entrar</CardDescription>
+        <CardHeader className="pb-2 flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <Button type="button" variant="outline" onClick={() => navigate(-1)}>Voltar</Button>
+            <div>
+              <CardTitle className="text-xl">Entrar</CardTitle>
+              <CardDescription className="text-sm">Use seu e-mail e senha para entrar</CardDescription>
+            </div>
+          </div>
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSubmit} className="space-y-4">
