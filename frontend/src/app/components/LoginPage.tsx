@@ -26,8 +26,21 @@ export function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center p-4">
-      <Card className="w-full max-w-md relative">
+    <div className="min-h-screen relative bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center p-4">
+      {/* Decorative sponsor images (absolute, don't affect layout).
+          Place your images in `frontend/public/sponsors/` with these names:
+          sponsor1.png ... sponsor6.png
+      */}
+      <div className="absolute inset-0 pointer-events-none z-0">
+        <img src="/sponsors/sponsor1.png" alt="" className="absolute -left-8 top-20 h-12 opacity-80 filter grayscale transition-transform" />
+        <img src="/sponsors/sponsor2.png" alt="" className="absolute right-6 -top-6 h-10 opacity-80 filter grayscale transition-transform" />
+        <img src="/sponsors/sponsor3.png" alt="" className="absolute left-4 bottom-10 h-14 opacity-80 filter grayscale transition-transform" />
+        <img src="/sponsors/sponsor4.png" alt="" className="absolute -right-10 bottom-20 h-12 opacity-80 filter grayscale transition-transform" />
+        <img src="/sponsors/sponsor5.png" alt="" className="absolute left-1/2 -translate-x-1/2 top-6 h-10 opacity-80 filter grayscale transition-transform" />
+        <img src="/sponsors/sponsor6.png" alt="" className="absolute left-6 top-1/2 -translate-y-1/2 h-10 opacity-80 filter grayscale transition-transform" />
+      </div>
+
+      <Card className="w-full max-w-md relative z-10">
         <Button
           type="button"
           variant="ghost"
