@@ -13,6 +13,9 @@
     "express": "^5.2.1",
     "sqlite3": "^5.1.7"
   },
+  "optionalDependencies": {
+    "nodemailer": "^6.9.5"
+  },
   "devDependencies": {
     "nodemon": "^2.0.22"
   }
