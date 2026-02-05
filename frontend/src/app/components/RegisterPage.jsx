@@ -199,9 +199,12 @@ export function RegisterPage() {
 
             {/* Dados Básicos */}
             <div className="space-y-3">
-              <h3 className="text-sm font-semibold text-muted-foreground uppercase tracking-wide">
-                Dados Básicos
-              </h3>
+              <div className="flex items-center justify-between">
+                <h3 className="text-sm font-semibold text-muted-foreground uppercase tracking-wide">
+                  Dados Básicos
+                </h3>
+                <span className="text-xs text-red-600">* campos obrigatórios</span>
+              </div>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-4">
                 <div className="space-y-2">
                   <Label htmlFor="name" className="text-sm">
