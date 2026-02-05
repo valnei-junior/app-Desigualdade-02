@@ -16,6 +16,8 @@ import { Toaster } from "@/app/components/ui/sonner";
 import { WelcomePage } from "@/app/components/WelcomePage";
 import { RegisterPage } from "@/app/components/RegisterPage.jsx";
 import { LoginPage } from "@/app/components/LoginPage";
+import { ForgotPassword } from "@/app/components/ForgotPassword";
+import { ResetPassword } from "@/app/components/ResetPassword";
 import { Layout } from "@/app/components/Layout";
 import { Dashboard } from "@/app/components/Dashboard";
 import { CoursesPage } from "@/app/components/CoursesPage";
@@ -69,8 +71,10 @@ function AppRoutes() {
         <Route path="/" element={<WelcomePage />} />
         <Route path="/cadastro" element={<RegisterPage />} />
         <Route path="/login" element={<LoginPage />} />
+        <Route path="/esqueci-senha" element={<ForgotPassword />} />
+        <Route path="/reset-password" element={<ResetPassword />} />
 
-        {/* Protected Routes */}
+        {/* Protected Routes */>
         <Route
           path="/"
           element={
