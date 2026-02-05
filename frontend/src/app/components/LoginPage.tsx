@@ -31,13 +31,13 @@ export function LoginPage() {
           Place your images in `frontend/public/sponsors/` with these names:
           sponsor1.png ... sponsor6.png
       */}
-      <div className="absolute inset-0 pointer-events-none z-0">
-        <img src="/sponsors/assai.png" alt="Assaí" className="absolute left-6 top-12 h-12 opacity-90 filter grayscale rotate-6 transform transition-transform" />
-        <img src="/sponsors/atacadao.png" alt="Atacadão" className="absolute -right-8 -top-10 h-14 opacity-90 filter grayscale -rotate-3 transform transition-transform" />
-        <img src="/sponsors/brandili_large.png" alt="Brandili" className="absolute left-12 bottom-8 h-16 opacity-90 filter grayscale rotate-3 transform transition-transform" />
-        <img src="/sponsors/cacau_chow.png" alt="Cacau Show" className="absolute -right-16 bottom-24 h-12 opacity-90 filter grayscale -rotate-6 transform transition-transform" />
-        <img src="/sponsors/cvc.png" alt="CVC" className="absolute left-1/2 -translate-x-1/2 top-6 h-10 opacity-90 filter grayscale rotate-12 transform transition-transform" />
-        <img src="/sponsors/sponsor6.webp" alt="Atacadão article" className="absolute left-10 top-1/2 -translate-y-1/2 h-14 opacity-90 filter grayscale -rotate-12 transform transition-transform" />
+      <div className="absolute inset-0 pointer-events-none z-0" aria-hidden="true">
+        <img src="/sponsors/assai.png" alt="" aria-hidden="true" className="absolute left-6 top-12 h-16 opacity-90 filter grayscale rotate-6 transform" />
+        <img src="/sponsors/atacadao.png" alt="" aria-hidden="true" className="absolute -right-10 -top-10 h-20 opacity-85 filter grayscale -rotate-6 transform" />
+        <img src="/sponsors/brandili_large.png" alt="" aria-hidden="true" className="absolute left-14 bottom-6 h-24 opacity-85 filter grayscale rotate-3 transform" />
+        <img src="/sponsors/cacau_chow.png" alt="" aria-hidden="true" className="absolute -right-20 bottom-24 h-14 opacity-85 filter grayscale -rotate-12 transform" />
+        <img src="/sponsors/cvc.png" alt="" aria-hidden="true" className="absolute left-1/2 -translate-x-1/2 top-6 h-12 opacity-85 filter grayscale rotate-12 transform" />
+        <img src="/sponsors/sponsor6.webp" alt="" aria-hidden="true" className="absolute left-10 top-1/2 -translate-y-1/2 h-20 opacity-85 filter grayscale -rotate-12 transform" />
       </div>
 
       <Card className="w-full max-w-md relative z-10">
@@ -79,15 +79,7 @@ export function LoginPage() {
           </form>
         </CardContent>
       </Card>
-      {/* Patrocinadores (estático) */}
-      <div className="w-full max-w-md mt-6 flex items-center justify-center">
-        <div className="flex items-center justify-center gap-4 bg-white/50 rounded-md px-4 py-2 shadow-sm">
-          <img src="https://via.placeholder.com/120x40?text=Patrocinador+1" alt="Patrocinador 1" className="h-10 object-contain filter grayscale opacity-80 hover:grayscale-0 hover:opacity-100 transition" />
-          <img src="https://via.placeholder.com/120x40?text=Patrocinador+2" alt="Patrocinador 2" className="h-10 object-contain filter grayscale opacity-80 hover:grayscale-0 hover:opacity-100 transition" />
-          <img src="https://via.placeholder.com/120x40?text=Patrocinador+3" alt="Patrocinador 3" className="h-10 object-contain filter grayscale opacity-80 hover:grayscale-0 hover:opacity-100 transition" />
-          <img src="https://via.placeholder.com/120x40?text=Patrocinador+4" alt="Patrocinador 4" className="h-10 object-contain filter grayscale opacity-80 hover:grayscale-0 hover:opacity-100 transition" />
-        </div>
-      </div>
+      {/* Decorative sponsors are scattered around the viewport; no static strip */}
     </div>
   );
 }
