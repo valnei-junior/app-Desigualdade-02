@@ -32,12 +32,12 @@ export function LoginPage() {
           sponsor1.png ... sponsor6.png
       */}
       <div className="absolute inset-0 pointer-events-none z-0" aria-hidden="true">
-        <img src="/sponsors/assai.png" alt="" aria-hidden="true" className="absolute left-6 top-12 h-16 opacity-90 filter grayscale rotate-6 transform" />
-        <img src="/sponsors/atacadao.png" alt="" aria-hidden="true" className="absolute -right-10 -top-10 h-20 opacity-85 filter grayscale -rotate-6 transform" />
-        <img src="/sponsors/brandili_large.png" alt="" aria-hidden="true" className="absolute left-14 bottom-6 h-24 opacity-85 filter grayscale rotate-3 transform" />
-        <img src="/sponsors/cacau_chow.png" alt="" aria-hidden="true" className="absolute -right-20 bottom-24 h-14 opacity-85 filter grayscale -rotate-12 transform" />
-        <img src="/sponsors/cvc.png" alt="" aria-hidden="true" className="absolute left-1/2 -translate-x-1/2 top-6 h-12 opacity-85 filter grayscale rotate-12 transform" />
-        <img src="/sponsors/sponsor6.webp" alt="" aria-hidden="true" className="absolute left-10 top-1/2 -translate-y-1/2 h-20 opacity-85 filter grayscale -rotate-12 transform" />
+        <img src="/sponsors/assai.png" alt="" aria-hidden="true" className="absolute left-6 top-12 h-16 opacity-100 rotate-6 transform" />
+        <img src="/sponsors/atacadao.png" alt="" aria-hidden="true" className="absolute -right-10 -top-10 h-20 opacity-100 -rotate-6 transform" />
+        <img src="/sponsors/brandili_large.png" alt="" aria-hidden="true" className="absolute left-14 bottom-6 h-24 opacity-100 rotate-3 transform" />
+        <img src="/sponsors/cacau_chow.png" alt="" aria-hidden="true" className="absolute -right-20 bottom-24 h-14 opacity-100 -rotate-12 transform" />
+        <img src="/sponsors/cvc.png" alt="" aria-hidden="true" className="absolute left-1/2 -translate-x-1/2 top-6 h-12 opacity-100 rotate-12 transform" />
+        <img src="/sponsors/sponsor6.webp" alt="" aria-hidden="true" className="absolute left-10 top-1/2 -translate-y-1/2 h-20 opacity-100 -rotate-12 transform" />
       </div>
 
       <Card className="w-full max-w-md relative z-10">
