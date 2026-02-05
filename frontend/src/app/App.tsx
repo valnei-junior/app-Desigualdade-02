@@ -63,35 +63,28 @@ function AppRoutes() {
         <Route path="/esqueci-senha" element={<ForgotPassword />} />
         <Route path="/reset-password" element={<ResetPassword />} />
 
-        {/* Protected Routes */}
+        {/* Protected Routes — use a different base so "/" isn't duplicated */}
         <Route
-          path="/"
           element={
             <ProtectedRoute>
               <Layout />
             </ProtectedRoute>
           }
         >
-          <Route path="dashboard" element={<Dashboard />} />
-          <Route path="cursos" element={<CoursesPage />} />
-          <Route path="cursos/:courseId" element={<CourseDetailsPage />} />
-          <Route path="vagas" element={<JobsPage />} />
-          <Route path="alertas" element={<AlertsPage />} />
-          <Route
-            path="linha-do-tempo"
-            element={<TimelinePage />}
-          />
-          <Route path="empresas" element={<CompaniesPage />} />
-          <Route path="perfil" element={<ProfilePage />} />
-          <Route path="metricas" element={<MetricsPage />} />
-          <Route
-            path="gamificacao"
-            element={<GamificationPage />}
-          />
-          <Route path="mentoria" element={<MentorshipPage />} />
-          <Route path="suporte" element={<SupportPage />} />
-          <Route path="financeiro" element={<FinancePage />} />
-          <Route path="configuracoes" element={<SettingsPage />} />
+          <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/cursos" element={<CoursesPage />} />
+          <Route path="/cursos/:courseId" element={<CourseDetailsPage />} />
+          <Route path="/vagas" element={<JobsPage />} />
+          <Route path="/alertas" element={<AlertsPage />} />
+          <Route path="/linha-do-tempo" element={<TimelinePage />} />
+          <Route path="/empresas" element={<CompaniesPage />} />
+          <Route path="/perfil" element={<ProfilePage />} />
+          <Route path="/metricas" element={<MetricsPage />} />
+          <Route path="/gamificacao" element={<GamificationPage />} />
+          <Route path="/mentoria" element={<MentorshipPage />} />
+          <Route path="/suporte" element={<SupportPage />} />
+          <Route path="/financeiro" element={<FinancePage />} />
+          <Route path="/configuracoes" element={<SettingsPage />} />
         </Route>
 
         {/* Fallback */}
