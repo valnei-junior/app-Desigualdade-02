@@ -208,7 +208,8 @@ export function RegisterPage() {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-4">
                 <div className="space-y-2">
                   <Label htmlFor="name" className="text-sm">
-                    {formData.role === ROLES.COMPANY ? 'Nome do Responsável' : 'Nome completo'} *
+                    {formData.role === ROLES.COMPANY ? 'Nome do Responsável' : 'Nome completo'} <span className="text-red-600">*</span>
+                    <span className="text-xs text-red-600 ml-1">campo obrigatório</span>
                   </Label>
                   <Input
                     id="name"
@@ -221,7 +222,9 @@ export function RegisterPage() {
                 </div>
 
                 <div className="space-y-2">
-                  <Label htmlFor="email" className="text-sm">E-mail *</Label>
+                  <Label htmlFor="email" className="text-sm">E-mail <span className="text-red-600">*</span>
+                    <span className="text-xs text-red-600 ml-1">campo obrigatório</span>
+                  </Label>
                   <Input
                     id="email"
                     type="email"
@@ -234,7 +237,9 @@ export function RegisterPage() {
                 </div>
 
                 <div className="space-y-2">
-                  <Label htmlFor="password" className="text-sm">Senha *</Label>
+                  <Label htmlFor="password" className="text-sm">Senha <span className="text-red-600">*</span>
+                    <span className="text-xs text-red-600 ml-1">campo obrigatório</span>
+                  </Label>
                   <Input
                     id="password"
                     type="password"
@@ -248,7 +253,9 @@ export function RegisterPage() {
                 </div>
 
                 <div className="space-y-2">
-                  <Label htmlFor="confirmPassword" className="text-sm">Confirmar Senha *</Label>
+                  <Label htmlFor="confirmPassword" className="text-sm">Confirmar Senha <span className="text-red-600">*</span>
+                    <span className="text-xs text-red-600 ml-1">campo obrigatório</span>
+                  </Label>
                   <Input
                     id="confirmPassword"
                     type="password"
