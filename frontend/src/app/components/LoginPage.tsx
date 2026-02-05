@@ -32,12 +32,12 @@ export function LoginPage() {
           sponsor1.png ... sponsor6.png
       */}
       <div className="absolute inset-0 pointer-events-none z-0">
-        <img src="/sponsors/assai-atacadista-logo-png_seeklogo-255596.png" alt="" className="absolute left-6 top-12 h-12 opacity-75 filter grayscale rotate-6 transform transition-transform" />
-        <img src="/sponsors/atacadao-logo-png_seeklogo-12694.png" alt="" className="absolute -right-8 -top-10 h-14 opacity-70 filter grayscale -rotate-3 transform transition-transform" />
-        <img src="/sponsors/brandili.jpg" alt="" className="absolute left-12 bottom-8 h-16 opacity-75 filter grayscale rotate-3 transform transition-transform" />
-        <img src="/sponsors/cacau%20chow.png" alt="" className="absolute -right-16 bottom-24 h-12 opacity-70 filter grayscale -rotate-6 transform transition-transform" />
-        <img src="/sponsors/CVC.png" alt="" className="absolute left-1/2 -translate-x-1/2 top-6 h-10 opacity-80 filter grayscale rotate-12 transform transition-transform" />
-        <img src="/sponsors/sponsor6.webp" alt="" className="absolute left-10 top-1/2 -translate-y-1/2 h-14 opacity-75 filter grayscale -rotate-12 transform transition-transform" />
+        <img src="/sponsors/assai.png" alt="Assaí" className="absolute left-6 top-12 h-12 opacity-90 filter grayscale rotate-6 transform transition-transform" />
+        <img src="/sponsors/atacadao.png" alt="Atacadão" className="absolute -right-8 -top-10 h-14 opacity-90 filter grayscale -rotate-3 transform transition-transform" />
+        <img src="/sponsors/brandili_large.png" alt="Brandili" className="absolute left-12 bottom-8 h-16 opacity-90 filter grayscale rotate-3 transform transition-transform" />
+        <img src="/sponsors/cacau_chow.png" alt="Cacau Show" className="absolute -right-16 bottom-24 h-12 opacity-90 filter grayscale -rotate-6 transform transition-transform" />
+        <img src="/sponsors/cvc.png" alt="CVC" className="absolute left-1/2 -translate-x-1/2 top-6 h-10 opacity-90 filter grayscale rotate-12 transform transition-transform" />
+        <img src="/sponsors/sponsor6.webp" alt="Atacadão article" className="absolute left-10 top-1/2 -translate-y-1/2 h-14 opacity-90 filter grayscale -rotate-12 transform transition-transform" />
       </div>
 
       <Card className="w-full max-w-md relative z-10">
