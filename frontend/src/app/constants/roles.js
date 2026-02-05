@@ -166,8 +166,6 @@ export const ROLE_ROUTES = {
   
   [ROLES.ADMIN]: [
     '/dashboard',
-    '/cursos',
-    '/vagas',
     '/alertas',
     '/linha-do-tempo',
     '/empresas',

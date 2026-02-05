@@ -44,7 +44,7 @@ export function LoginPage() {
         <Button
           type="button"
           variant="ghost"
-          onClick={() => navigate(-1)}
+          onClick={() => navigate('/')}
           className="absolute top-3 right-3 flex items-center gap-2 px-2 py-1"
           aria-label="Voltar"
         >
