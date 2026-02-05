@@ -168,3 +168,31 @@ export const uploadResume = async (file, userId) => {
   
   return response.json();
 };
+
+// ==================== AUTH / PASSWORD RESET ====================
+export const requestPasswordReset = async (email) => {
+  try {
+    const response = await fetch(`${API_BASE_URL}/auth/forgot-password`, {
+      method: 'POST',
+      headers: getHeaders(),
+      body: JSON.stringify({ email }),
+    });
+
+    // If endpoint not implemented, still return ok to avoid blocking UX
+    if (!response.ok) {
+      // Try to parse error, but return false to indicate failure
+      try {
+        const err = await response.json();
+        console.warn('Password reset request failed:', err);
+      } catch (e) {
+        console.warn('Password reset request failed');
+      }
+      return false;
+    }
+
+    return true;
+  } catch (err) {
+    console.error('requestPasswordReset error:', err);
+    return false;
+  }
+};
