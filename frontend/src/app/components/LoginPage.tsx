@@ -27,7 +27,20 @@ export function LoginPage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center p-4">
-      <Card className="w-full max-w-md">
+      <Card className="w-full max-w-md relative">
+        <Button
+          type="button"
+          variant="ghost"
+          onClick={() => navigate(-1)}
+          className="absolute top-3 right-3 flex items-center gap-2 px-2 py-1"
+          aria-label="Voltar"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" strokeWidth="2" stroke="currentColor" className="w-4 h-4 text-gray-600" aria-hidden>
+            <path d="M15 18l-6-6 6-6" strokeLinecap="round" strokeLinejoin="round" />
+          </svg>
+          <span className="text-sm hover:text-blue-600">Voltar</span>
+        </Button>
+
         <CardHeader className="pb-2">
           <CardTitle className="text-xl">Entrar</CardTitle>
           <CardDescription className="text-sm">Use seu e-mail e senha para entrar</CardDescription>
@@ -47,7 +60,6 @@ export function LoginPage() {
             {error && <p className="text-sm text-red-600">{error}</p>}
 
             <div className="flex gap-3">
-              <Button type="button" variant="outline" onClick={() => navigate(-1)}>Voltar</Button>
               <Button type="submit" className="flex-1">Entrar</Button>
               <Button type="button" variant="outline" onClick={() => navigate('/cadastro')}>Cadastrar</Button>
             </div>
