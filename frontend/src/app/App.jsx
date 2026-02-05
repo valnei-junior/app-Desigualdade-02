@@ -74,7 +74,7 @@ function AppRoutes() {
         <Route path="/esqueci-senha" element={<ForgotPassword />} />
         <Route path="/reset-password" element={<ResetPassword />} />
 
-        {/* Protected Routes */>
+        {/* Protected Routes */}
         <Route
           path="/"
           element={
