@@ -66,6 +66,15 @@ export function LoginPage() {
           </form>
         </CardContent>
       </Card>
+      {/* Patrocinadores (estático) */}
+      <div className="w-full max-w-md mt-6 flex items-center justify-center">
+        <div className="flex items-center justify-center gap-4 bg-white/50 rounded-md px-4 py-2 shadow-sm">
+          <img src="https://via.placeholder.com/120x40?text=Patrocinador+1" alt="Patrocinador 1" className="h-10 object-contain filter grayscale opacity-80 hover:grayscale-0 hover:opacity-100 transition" />
+          <img src="https://via.placeholder.com/120x40?text=Patrocinador+2" alt="Patrocinador 2" className="h-10 object-contain filter grayscale opacity-80 hover:grayscale-0 hover:opacity-100 transition" />
+          <img src="https://via.placeholder.com/120x40?text=Patrocinador+3" alt="Patrocinador 3" className="h-10 object-contain filter grayscale opacity-80 hover:grayscale-0 hover:opacity-100 transition" />
+          <img src="https://via.placeholder.com/120x40?text=Patrocinador+4" alt="Patrocinador 4" className="h-10 object-contain filter grayscale opacity-80 hover:grayscale-0 hover:opacity-100 transition" />
+        </div>
+      </div>
     </div>
   );
 }
