@@ -196,3 +196,23 @@ export const requestPasswordReset = async (email) => {
     return false;
   }
 };
+
+export const resetPassword = async (token, password) => {
+  try {
+    const response = await fetch(`${API_BASE_URL}/auth/reset-password`, {
+      method: 'POST',
+      headers: getHeaders(),
+      body: JSON.stringify({ token, password }),
+    });
+
+    if (!response.ok) {
+      const err = await response.json().catch(() => ({}));
+      throw new Error(err.error || 'Erro ao redefinir senha');
+    }
+
+    return true;
+  } catch (err) {
+    console.error('resetPassword error:', err);
+    throw err;
+  }
+};

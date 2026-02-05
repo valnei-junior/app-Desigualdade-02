@@ -116,6 +116,7 @@ app.post('/api/auth/forgot-password', (req, res) => {
       }
 
       const frontendHost = process.env.FRONTEND_URL || 'http://localhost:5173';
+      const appName = process.env.APP_NAME || 'Nossa Plataforma';
       const resetUrl = `${frontendHost}/reset-password?token=${token}`;
 
       // Try to send email if SMTP ENV provided
@@ -135,9 +136,19 @@ app.post('/api/auth/forgot-password', (req, res) => {
           const mail = {
             from: process.env.SMTP_FROM || process.env.SMTP_USER,
             to: email,
-            subject: 'Redefinição de senha',
-            text: `Para redefinir sua senha, acesse: ${resetUrl}`,
-            html: `<p>Para redefinir sua senha, clique no link abaixo:</p><p><a href="${resetUrl}">${resetUrl}</a></p><p>Se você não solicitou, ignore este e-mail.</p>`,
+            subject: `Redefinição de senha - ${appName}`,
+            text: `Olá, você ou alguém solicitou a redefinição de senha para sua conta em ${appName}. Acesse o link para definir uma nova senha: ${resetUrl}`,
+            html: `
+              <div style="font-family: Arial, sans-serif; color: #111;">
+                <h2 style="color:#0B5FFF">${appName}</h2>
+                <p>Olá,</p>
+                <p>Recebemos uma solicitação para redefinir a senha da sua conta em <strong>${appName}</strong>.</p>
+                <p>Clique no botão abaixo para definir uma nova senha. O link expira em 1 hora.</p>
+                <p style="text-align:center; margin: 24px 0;"><a href="${resetUrl}" style="background:#0B5FFF;color:#fff;padding:10px 18px;border-radius:6px;text-decoration:none;">Redefinir minha senha</a></p>
+                <p>Se você não solicitou essa alteração, ignore este e-mail.</p>
+                <p>Atenciosamente,<br/>Equipe ${appName}</p>
+              </div>
+            `,
           };
 
           transporter.sendMail(mail, (mailErr, info) => {
