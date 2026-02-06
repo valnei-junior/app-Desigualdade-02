@@ -1,10 +1,10 @@
-import { projectId, publicAnonKey } from '@/utils/supabase/info';
-
-const API_BASE_URL = `https://${projectId}.supabase.co/functions/v1/make-server-5af427a5`;
+// Use the same local backend used by UserContext for auth
+const API_BASE_URL = (typeof import.meta !== 'undefined' && import.meta.env && import.meta.env.VITE_API_URL)
+  ? import.meta.env.VITE_API_URL.replace(/\/+$/, '') + '/api'
+  : 'http://localhost:4000/api';
 
 const getHeaders = () => ({
   'Content-Type': 'application/json',
-  'Authorization': `Bearer ${publicAnonKey}`,
 });
 
 // ==================== VAGAS (JOBS) ====================
@@ -155,9 +155,7 @@ export const uploadResume = async (file, userId) => {
 
   const response = await fetch(`${API_BASE_URL}/upload-resume`, {
     method: 'POST',
-    headers: {
-      'Authorization': `Bearer ${publicAnonKey}`,
-    },
+    // No auth header for local backend; content-type is set automatically for FormData
     body: formData,
   });
   

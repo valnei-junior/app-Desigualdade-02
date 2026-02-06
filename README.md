@@ -116,16 +116,38 @@ curl http://localhost:4000/api/health
 ```
 
 Endpoints importantes (desenvolvimento):
+
+**Autenticação:**
 - `POST /api/register` — registrar usuário (body JSON: `email`, `password`, `name`, ...)
 - `POST /api/login` — autenticar usuário (body JSON: `email`, `password`)
-- `POST /api/guest` — cria/retorna um usuário 'guest' (usado por botões de login rápido na UI)
+- `POST /api/auth/forgot-password` — solicitar redefinição de senha (body JSON: `email`)
+- `POST /api/auth/reset-password` — redefinir senha (body JSON: `token`, `password`)
 
-Observação: havia dois arquivos de servidor em `server/` (`index.cjs` e `index.js`). Para evitar confusão mantivemos apenas `index.cjs` (fonte de verdade) e removemos `index.js`. Use os comandos acima dentro de `server/`.
+**Vagas (Jobs):**
+- `GET  /api/jobs` — listar todas as vagas ativas (estudantes e admin)
+- `GET  /api/jobs/company/:companyId` — listar vagas de uma empresa
+- `POST /api/jobs` — criar nova vaga (body JSON: `companyId`, `companyName`, `title`, `area`, `type`, ...)
+- `PUT  /api/jobs/:jobId` — atualizar vaga
+- `DELETE /api/jobs/:jobId` — excluir vaga
+
+**Candidaturas (Applications):**
+- `POST /api/applications` — candidatar-se a uma vaga (body JSON: `jobId`, `candidateId`, `candidateData`)
+- `GET  /api/applications/company/:companyId` — listar candidaturas das vagas de uma empresa
+- `PUT  /api/applications/:applicationId` — atualizar status da candidatura (body JSON: `status`)
+- `DELETE /api/applications/:applicationId` — excluir candidatura
+
+> **Fluxo de vagas:** A empresa cria vagas pelo painel (`/vagas`). As vagas aparecem automaticamente para **estudantes** e **administradores** na mesma rota `/vagas`, que busca as vagas ativas do backend via `GET /api/jobs`.
 
 Exemplo de curl para registro:
 
 ```powershell
 curl -X POST http://localhost:4000/api/register -H "Content-Type: application/json" -d '{"email":"a@b.com","password":"123456","name":"Teste"}'
+```
+
+Exemplo de curl para criar vaga:
+
+```powershell
+curl -X POST http://localhost:4000/api/jobs -H "Content-Type: application/json" -d '{"companyId":"123","companyName":"TechCorp","title":"Dev Frontend Jr","area":"TI","type":"Estágio","location":"São Paulo, SP","salary":"R$ 2.000"}'
 ```
 
 
@@ -345,9 +367,12 @@ Veja o arquivo de referência em [backend/schema.sql](backend/schema.sql).
 - [x] Página de gestão de alunos
 - [x] Painel administrativo completo
 - [x] Painel de empresa de cursos (financeiro, indicações e página do curso)
+- [x] API de vagas — empresa cria, estudante e admin visualizam automaticamente
+- [x] API de candidaturas — estudante se candidata, empresa gerencia
+- [x] Redefinição de senha (forgot/reset password com e-mail)
 
 ### 🚧 Em Desenvolvimento
-- [ ] Backend com API (produção)
+- [ ] Backend com API completo (produção)
 
 ### 📋 Planejado
 - [ ] Autenticação JWT
@@ -387,17 +412,16 @@ Para dúvidas sobre o sistema:
 
 ---
 
-**Versão**: 1.0.0  
-**Última Atualização**: 03 de Fevereiro de 2026
+**Versão**: 1.1.0  
+**Última Atualização**: 05 de Fevereiro de 2026
 
 ⭐ Se este projeto foi útil, considere dar uma estrela!
 
 
 
-cd "d:\Desktop\Ultimo projeto de Valtemir\app-Desigualdade-\backend"
-npm run start
+cd "C:\Users\a92207984\Desktop\Projeto feito com Valnei e Wesley\app-Desigualdade-02\backend"
+node index.js
 
-
-cd "d:\Desktop\Ultimo projeto de Valtemir\app-Desigualdade-\frontend"
+cd "C:\Users\a92207984\Desktop\Projeto feito com Valnei e Wesley\app-Desigualdade-02\frontend"
 $env:DISABLE_ELECTRON="true"
 npx vite

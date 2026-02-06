@@ -229,6 +229,7 @@ export function CompanyJobsManagement() {
     try {
       const jobData = {
         companyId: user.id,
+        companyName: user.name || user.email || 'Empresa',
         title: formData.title,
         description: formData.description,
         area: formData.area,
