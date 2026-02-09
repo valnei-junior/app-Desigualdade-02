@@ -542,48 +542,50 @@ export function Dashboard() {
         <p className="text-sm md:text-base text-muted-foreground">Veja seu progresso na jornada</p>
       </div>
 
-      {/* Trilha: Curso → Estágio → Emprego */}
-      <Card>
-        <CardHeader className="pb-3">
-          <CardTitle className="text-lg md:text-xl">Sua Trilha de Carreira</CardTitle>
-          <CardDescription className="text-xs md:text-sm">Curso → Estágio → Emprego</CardDescription>
-        </CardHeader>
-        <CardContent>
-          <div className="space-y-3 md:space-y-4">
-            {mockTimeline.map((item, idx) => (
-              <div key={item.id} className="flex items-center gap-3 md:gap-4">
-                <div className={`flex h-8 w-8 md:h-10 md:w-10 items-center justify-center rounded-full shrink-0 ${
-                  item.status === 'completed' ? 'bg-green-100 text-green-600' :
-                  item.status === 'in-progress' ? 'bg-blue-100 text-blue-600' :
-                  'bg-gray-100 text-gray-400'
-                }`}>
-                  {idx === 0 ? <BookOpen className="h-4 w-4 md:h-5 md:w-5" /> :
-                   idx === 1 ? <Briefcase className="h-4 w-4 md:h-5 md:w-5" /> :
-                   <Target className="h-4 w-4 md:h-5 md:w-5" />}
-                </div>
-                <div className="flex-1 min-w-0">
-                  <div className="flex items-center justify-between gap-2">
-                    <div className="min-w-0 flex-1">
-                      <p className="font-medium text-sm md:text-base truncate">{item.title}</p>
-                      <p className="text-xs md:text-sm text-muted-foreground">{item.date}</p>
-                    </div>
-                    <Badge variant={
-                      item.status === 'completed' ? 'default' :
-                      item.status === 'in-progress' ? 'secondary' :
-                      'outline'
-                    } className="text-xs shrink-0">
-                      {item.status === 'completed' ? 'Concluído' :
-                       item.status === 'in-progress' ? 'Em andamento' :
-                       'Pendente'}
-                    </Badge>
+      {/* Trilha: Curso → Estágio → Emprego (oculto para empresas) */}
+      {user?.role !== ROLES.COMPANY && (
+        <Card>
+          <CardHeader className="pb-3">
+            <CardTitle className="text-lg md:text-xl">Sua Trilha de Carreira</CardTitle>
+            <CardDescription className="text-xs md:text-sm">Curso → Estágio → Emprego</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-3 md:space-y-4">
+              {mockTimeline.map((item, idx) => (
+                <div key={item.id} className="flex items-center gap-3 md:gap-4">
+                  <div className={`flex h-8 w-8 md:h-10 md:w-10 items-center justify-center rounded-full shrink-0 ${
+                    item.status === 'completed' ? 'bg-green-100 text-green-600' :
+                    item.status === 'in-progress' ? 'bg-blue-100 text-blue-600' :
+                    'bg-gray-100 text-gray-400'
+                  }`}>
+                    {idx === 0 ? <BookOpen className="h-4 w-4 md:h-5 md:w-5" /> :
+                     idx === 1 ? <Briefcase className="h-4 w-4 md:h-5 md:w-5" /> :
+                     <Target className="h-4 w-4 md:h-5 md:w-5" />}
                   </div>
-                  <Progress value={item.progress} className="mt-2 h-2" />
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center justify-between gap-2">
+                      <div className="min-w-0 flex-1">
+                        <p className="font-medium text-sm md:text-base truncate">{item.title}</p>
+                        <p className="text-xs md:text-sm text-muted-foreground">{item.date}</p>
+                      </div>
+                      <Badge variant={
+                        item.status === 'completed' ? 'default' :
+                        item.status === 'in-progress' ? 'secondary' :
+                        'outline'
+                      } className="text-xs shrink-0">
+                        {item.status === 'completed' ? 'Concluído' :
+                         item.status === 'in-progress' ? 'Em andamento' :
+                         'Pendente'}
+                      </Badge>
+                    </div>
+                    <Progress value={item.progress} className="mt-2 h-2" />
+                  </div>
                 </div>
-              </div>
-            ))}
-          </div>
-        </CardContent>
-      </Card>
+              ))}
+            </div>
+          </CardContent>
+        </Card>
+      )}
 
       {/* Status da Candidatura */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 md:gap-4">
@@ -679,46 +681,48 @@ export function Dashboard() {
         </CardContent>
       </Card>
 
-      {/* Indicador de Chance de Contratação */}
-      <Card>
-        <CardHeader className="pb-3">
-          <CardTitle className="flex items-center gap-2 text-lg md:text-xl">
-            <TrendingUp className="h-4 w-4 md:h-5 md:w-5" />
-            Chance de Contratação
-          </CardTitle>
-          <CardDescription className="text-xs md:text-sm">
-            Baseado em seu perfil e histórico
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <div className="space-y-3 md:space-y-4">
-            <div>
-              <div className="flex items-center justify-between mb-2">
-                <span className="text-xs md:text-sm font-medium">Perfil completo</span>
-                <span className="text-xs md:text-sm text-muted-foreground">85%</span>
+      {/* Indicador de Chance de Contratação (oculto para empresas) */}
+      {user?.role !== ROLES.COMPANY && (
+        <Card>
+          <CardHeader className="pb-3">
+            <CardTitle className="flex items-center gap-2 text-lg md:text-xl">
+              <TrendingUp className="h-4 w-4 md:h-5 md:w-5" />
+              Chance de Contratação
+            </CardTitle>
+            <CardDescription className="text-xs md:text-sm">
+              Baseado em seu perfil e histórico
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-3 md:space-y-4">
+              <div>
+                <div className="flex items-center justify-between mb-2">
+                  <span className="text-xs md:text-sm font-medium">Perfil completo</span>
+                  <span className="text-xs md:text-sm text-muted-foreground">85%</span>
+                </div>
+                <Progress value={85} className="h-2" />
               </div>
-              <Progress value={85} className="h-2" />
-            </div>
-            <div>
-              <div className="flex items-center justify-between mb-2">
-                <span className="text-xs md:text-sm font-medium">Cursos relevantes</span>
-                <span className="text-xs md:text-sm text-muted-foreground">70%</span>
+              <div>
+                <div className="flex items-center justify-between mb-2">
+                  <span className="text-xs md:text-sm font-medium">Cursos relevantes</span>
+                  <span className="text-xs md:text-sm text-muted-foreground">70%</span>
+                </div>
+                <Progress value={70} className="h-2" />
               </div>
-              <Progress value={70} className="h-2" />
+              <div className="pt-3 md:pt-4 border-t">
+                <p className="text-xs md:text-sm text-muted-foreground">
+                  Complete mais cursos e atualize seu perfil para aumentar suas chances!
+                </p>
+                <Link to="/perfil">
+                  <Button variant="link" className="px-0 mt-2 h-auto text-xs md:text-sm">
+                    Ir para perfil →
+                  </Button>
+                </Link>
+              </div>
             </div>
-            <div className="pt-3 md:pt-4 border-t">
-              <p className="text-xs md:text-sm text-muted-foreground">
-                Complete mais cursos e atualize seu perfil para aumentar suas chances!
-              </p>
-              <Link to="/perfil">
-                <Button variant="link" className="px-0 mt-2 h-auto text-xs md:text-sm">
-                  Ir para perfil →
-                </Button>
-              </Link>
-            </div>
-          </div>
-        </CardContent>
-      </Card>
+          </CardContent>
+        </Card>
+      )}
     </div>
   );
 }
