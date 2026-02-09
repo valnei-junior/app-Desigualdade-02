@@ -21,7 +21,12 @@ import {
   ClipboardList,
   MessageSquare,
   CheckCircle2,
-  Calendar
+  Calendar,
+  FileText,
+  Clock,
+  UserCheck,
+  Mail,
+  Plus
 } from 'lucide-react';
 
 export function Dashboard() {
@@ -31,6 +36,7 @@ export function Dashboard() {
 
   const currentStage = mockTimeline.find(t => t.status === 'in-progress');
   const isCourseProvider = user?.role === ROLES.COURSE_PROVIDER;
+  const isCompany = user?.role === ROLES.COMPANY;
 
   const storagePrefix = user?.id ? `course_provider_${user.id}` : 'course_provider';
   const providerData = useMemo(() => {
@@ -534,6 +540,203 @@ export function Dashboard() {
     );
   }
 
+  // Dashboard específico para COMPANY (Empresas de Recrutamento)
+  if (isCompany) {
+    // Dados simulados para demonstração
+    const newResumes = 12;
+    const scheduledInterviews = 5;
+    const upcomingDeadlines = 3;
+    const pendingMessages = 8;
+
+    return (
+      <div className="space-y-4 md:space-y-6">
+        <div>
+          <h1 className="text-2xl md:text-3xl font-bold">Dashboard — {user.companyName || user.name}</h1>
+          <p className="text-sm md:text-base text-muted-foreground">Gestão de vagas e candidatos</p>
+        </div>
+
+        {/* Cards Principais */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4">
+          <Card className="bg-gradient-to-br from-blue-50/60 to-background">
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <CardTitle className="text-sm font-medium">Novos Currículos</CardTitle>
+              <FileText className="h-4 w-4 text-blue-600" />
+            </CardHeader>
+            <CardContent>
+              <div className="text-2xl font-bold">{newResumes}</div>
+              <p className="text-xs text-muted-foreground">Recebidos esta semana</p>
+            </CardContent>
+          </Card>
+
+          <Card className="bg-gradient-to-br from-emerald-50/60 to-background">
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <CardTitle className="text-sm font-medium">Entrevistas Agendadas</CardTitle>
+              <UserCheck className="h-4 w-4 text-emerald-600" />
+            </CardHeader>
+            <CardContent>
+              <div className="text-2xl font-bold">{scheduledInterviews}</div>
+              <p className="text-xs text-muted-foreground">Próximos 7 dias</p>
+            </CardContent>
+          </Card>
+
+          <Card className="bg-gradient-to-br from-amber-50/60 to-background">
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <CardTitle className="text-sm font-medium">Prazos Próximos</CardTitle>
+              <Clock className="h-4 w-4 text-amber-600" />
+            </CardHeader>
+            <CardContent>
+              <div className="text-2xl font-bold">{upcomingDeadlines}</div>
+              <p className="text-xs text-muted-foreground">Vagas vencendo em breve</p>
+            </CardContent>
+          </Card>
+
+          <Card className="bg-gradient-to-br from-violet-50/60 to-background">
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <CardTitle className="text-sm font-medium">Mensagens Pendentes</CardTitle>
+              <Mail className="h-4 w-4 text-violet-600" />
+            </CardHeader>
+            <CardContent>
+              <div className="text-2xl font-bold">{pendingMessages}</div>
+              <p className="text-xs text-muted-foreground">Não respondidas</p>
+            </CardContent>
+          </Card>
+        </div>
+
+        {/* Alertas e Notificações */}
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2 text-lg md:text-xl">
+              <Bell className="h-4 w-4 md:h-5 md:w-5" />
+              Alertas e Notificações
+            </CardTitle>
+            <CardDescription className="text-xs md:text-sm">
+              Acompanhamento de atividades importantes
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            {/* Novos Currículos Recebidos */}
+            <div className="space-y-3 pb-4 border-b">
+              <div className="flex items-start justify-between gap-3">
+                <div className="flex items-start gap-3">
+                  <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-blue-100 text-blue-600 shrink-0">
+                    <FileText className="h-4 w-4" />
+                  </div>
+                  <div>
+                    <p className="font-medium text-sm">Novos currículos recebidos</p>
+                    <p className="text-xs text-muted-foreground">12 candidatos se inscreveram para suas vagas</p>
+                  </div>
+                </div>
+                <Badge className="bg-blue-100 text-blue-700 hover:bg-blue-100">Novo</Badge>
+              </div>
+              <Link to="/vagas">
+                <Button variant="ghost" size="sm" className="h-8 text-xs">
+                  Ver candidatos →
+                </Button>
+              </Link>
+            </div>
+
+            {/* Entrevistas Agendadas */}
+            <div className="space-y-3 pb-4 border-b">
+              <div className="flex items-start justify-between gap-3">
+                <div className="flex items-start gap-3">
+                  <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-emerald-100 text-emerald-600 shrink-0">
+                    <UserCheck className="h-4 w-4" />
+                  </div>
+                  <div>
+                    <p className="font-medium text-sm">Entrevistas agendadas</p>
+                    <p className="text-xs text-muted-foreground">5 entrevistas confirmadas para a próxima semana</p>
+                  </div>
+                </div>
+                <Badge className="bg-emerald-100 text-emerald-700 hover:bg-emerald-100">Calendário</Badge>
+              </div>
+              <Link to="/vagas">
+                <Button variant="ghost" size="sm" className="h-8 text-xs">
+                  Gerenciar calendário →
+                </Button>
+              </Link>
+            </div>
+
+            {/* Prazos Próximos */}
+            <div className="space-y-3 pb-4 border-b">
+              <div className="flex items-start justify-between gap-3">
+                <div className="flex items-start gap-3">
+                  <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-amber-100 text-amber-600 shrink-0">
+                    <Clock className="h-4 w-4" />
+                  </div>
+                  <div>
+                    <p className="font-medium text-sm">Prazos próximos</p>
+                    <p className="text-xs text-muted-foreground">3 vagas com prazo de encerramento em breve</p>
+                  </div>
+                </div>
+                <Badge variant="destructive" className="bg-amber-100 text-amber-700 hover:bg-amber-100">Urgente</Badge>
+              </div>
+              <Link to="/vagas">
+                <Button variant="ghost" size="sm" className="h-8 text-xs">
+                  Renovar vagas →
+                </Button>
+              </Link>
+            </div>
+
+            {/* Mensagens Pendentes */}
+            <div className="space-y-3">
+              <div className="flex items-start justify-between gap-3">
+                <div className="flex items-start gap-3">
+                  <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-violet-100 text-violet-600 shrink-0">
+                    <Mail className="h-4 w-4" />
+                  </div>
+                  <div>
+                    <p className="font-medium text-sm">Mensagens pendentes</p>
+                    <p className="text-xs text-muted-foreground">8 candidatos aguardam sua resposta</p>
+                  </div>
+                </div>
+                <Badge className="bg-violet-100 text-violet-700 hover:bg-violet-100">Chat</Badge>
+              </div>
+              <Link to="/vagas">
+                <Button variant="ghost" size="sm" className="h-8 text-xs">
+                  Responder mensagens →
+                </Button>
+              </Link>
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* Ações Rápidas */}
+        <Card>
+          <CardHeader className="pb-3">
+            <CardTitle className="text-lg">Ações Rápidas</CardTitle>
+            <CardDescription className="text-xs">Acesso direto às funcionalidades principais</CardDescription>
+          </CardHeader>
+          <CardContent className="flex flex-wrap gap-2">
+            <Link to="/vagas">
+              <Button size="sm" className="gap-2">
+                <Plus className="h-4 w-4" />
+                Criar nova vaga
+              </Button>
+            </Link>
+            <Link to="/vagas">
+              <Button size="sm" variant="outline" className="gap-2">
+                <Briefcase className="h-4 w-4" />
+                Gerenciar vagas
+              </Button>
+            </Link>
+            <Link to="/empresas">
+              <Button size="sm" variant="outline" className="gap-2">
+                <Users className="h-4 w-4" />
+                Ver candidatos
+              </Button>
+            </Link>
+            <Link to="/metricas">
+              <Button size="sm" variant="outline" className="gap-2">
+                <BarChart3 className="h-4 w-4" />
+                Métricas
+              </Button>
+            </Link>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
+
 
   return (
     <div className="space-y-4 md:space-y-6">
@@ -542,50 +745,48 @@ export function Dashboard() {
         <p className="text-sm md:text-base text-muted-foreground">Veja seu progresso na jornada</p>
       </div>
 
-      {/* Trilha: Curso → Estágio → Emprego (oculto para empresas) */}
-      {user?.role !== ROLES.COMPANY && (
-        <Card>
-          <CardHeader className="pb-3">
-            <CardTitle className="text-lg md:text-xl">Sua Trilha de Carreira</CardTitle>
-            <CardDescription className="text-xs md:text-sm">Curso → Estágio → Emprego</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <div className="space-y-3 md:space-y-4">
-              {mockTimeline.map((item, idx) => (
-                <div key={item.id} className="flex items-center gap-3 md:gap-4">
-                  <div className={`flex h-8 w-8 md:h-10 md:w-10 items-center justify-center rounded-full shrink-0 ${
-                    item.status === 'completed' ? 'bg-green-100 text-green-600' :
-                    item.status === 'in-progress' ? 'bg-blue-100 text-blue-600' :
-                    'bg-gray-100 text-gray-400'
-                  }`}>
-                    {idx === 0 ? <BookOpen className="h-4 w-4 md:h-5 md:w-5" /> :
-                     idx === 1 ? <Briefcase className="h-4 w-4 md:h-5 md:w-5" /> :
-                     <Target className="h-4 w-4 md:h-5 md:w-5" />}
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    <div className="flex items-center justify-between gap-2">
-                      <div className="min-w-0 flex-1">
-                        <p className="font-medium text-sm md:text-base truncate">{item.title}</p>
-                        <p className="text-xs md:text-sm text-muted-foreground">{item.date}</p>
-                      </div>
-                      <Badge variant={
-                        item.status === 'completed' ? 'default' :
-                        item.status === 'in-progress' ? 'secondary' :
-                        'outline'
-                      } className="text-xs shrink-0">
-                        {item.status === 'completed' ? 'Concluído' :
-                         item.status === 'in-progress' ? 'Em andamento' :
-                         'Pendente'}
-                      </Badge>
-                    </div>
-                    <Progress value={item.progress} className="mt-2 h-2" />
-                  </div>
+      {/* Trilha: Curso → Estágio → Emprego */}
+      <Card>
+        <CardHeader className="pb-3">
+          <CardTitle className="text-lg md:text-xl">Sua Trilha de Carreira</CardTitle>
+          <CardDescription className="text-xs md:text-sm">Curso → Estágio → Emprego</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <div className="space-y-3 md:space-y-4">
+            {mockTimeline.map((item, idx) => (
+              <div key={item.id} className="flex items-center gap-3 md:gap-4">
+                <div className={`flex h-8 w-8 md:h-10 md:w-10 items-center justify-center rounded-full shrink-0 ${
+                  item.status === 'completed' ? 'bg-green-100 text-green-600' :
+                  item.status === 'in-progress' ? 'bg-blue-100 text-blue-600' :
+                  'bg-gray-100 text-gray-400'
+                }`}>
+                  {idx === 0 ? <BookOpen className="h-4 w-4 md:h-5 md:w-5" /> :
+                   idx === 1 ? <Briefcase className="h-4 w-4 md:h-5 md:w-5" /> :
+                   <Target className="h-4 w-4 md:h-5 md:w-5" />}
                 </div>
-              ))}
-            </div>
-          </CardContent>
-        </Card>
-      )}
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-center justify-between gap-2">
+                    <div className="min-w-0 flex-1">
+                      <p className="font-medium text-sm md:text-base truncate">{item.title}</p>
+                      <p className="text-xs md:text-sm text-muted-foreground">{item.date}</p>
+                    </div>
+                    <Badge variant={
+                      item.status === 'completed' ? 'default' :
+                      item.status === 'in-progress' ? 'secondary' :
+                      'outline'
+                    } className="text-xs shrink-0">
+                      {item.status === 'completed' ? 'Concluído' :
+                       item.status === 'in-progress' ? 'Em andamento' :
+                       'Pendente'}
+                    </Badge>
+                  </div>
+                  <Progress value={item.progress} className="mt-2 h-2" />
+                </div>
+              </div>
+            ))}
+          </div>
+        </CardContent>
+      </Card>
 
       {/* Status da Candidatura */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 md:gap-4">
@@ -681,48 +882,46 @@ export function Dashboard() {
         </CardContent>
       </Card>
 
-      {/* Indicador de Chance de Contratação (oculto para empresas) */}
-      {user?.role !== ROLES.COMPANY && (
-        <Card>
-          <CardHeader className="pb-3">
-            <CardTitle className="flex items-center gap-2 text-lg md:text-xl">
-              <TrendingUp className="h-4 w-4 md:h-5 md:w-5" />
-              Chance de Contratação
-            </CardTitle>
-            <CardDescription className="text-xs md:text-sm">
-              Baseado em seu perfil e histórico
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <div className="space-y-3 md:space-y-4">
-              <div>
-                <div className="flex items-center justify-between mb-2">
-                  <span className="text-xs md:text-sm font-medium">Perfil completo</span>
-                  <span className="text-xs md:text-sm text-muted-foreground">85%</span>
-                </div>
-                <Progress value={85} className="h-2" />
+      {/* Indicador de Chance de Contratação */}
+      <Card>
+        <CardHeader className="pb-3">
+          <CardTitle className="flex items-center gap-2 text-lg md:text-xl">
+            <TrendingUp className="h-4 w-4 md:h-5 md:w-5" />
+            Chance de Contratação
+          </CardTitle>
+          <CardDescription className="text-xs md:text-sm">
+            Baseado em seu perfil e histórico
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <div className="space-y-3 md:space-y-4">
+            <div>
+              <div className="flex items-center justify-between mb-2">
+                <span className="text-xs md:text-sm font-medium">Perfil completo</span>
+                <span className="text-xs md:text-sm text-muted-foreground">85%</span>
               </div>
-              <div>
-                <div className="flex items-center justify-between mb-2">
-                  <span className="text-xs md:text-sm font-medium">Cursos relevantes</span>
-                  <span className="text-xs md:text-sm text-muted-foreground">70%</span>
-                </div>
-                <Progress value={70} className="h-2" />
-              </div>
-              <div className="pt-3 md:pt-4 border-t">
-                <p className="text-xs md:text-sm text-muted-foreground">
-                  Complete mais cursos e atualize seu perfil para aumentar suas chances!
-                </p>
-                <Link to="/perfil">
-                  <Button variant="link" className="px-0 mt-2 h-auto text-xs md:text-sm">
-                    Ir para perfil →
-                  </Button>
-                </Link>
-              </div>
+              <Progress value={85} className="h-2" />
             </div>
-          </CardContent>
-        </Card>
-      )}
+            <div>
+              <div className="flex items-center justify-between mb-2">
+                <span className="text-xs md:text-sm font-medium">Cursos relevantes</span>
+                <span className="text-xs md:text-sm text-muted-foreground">70%</span>
+              </div>
+              <Progress value={70} className="h-2" />
+            </div>
+            <div className="pt-3 md:pt-4 border-t">
+              <p className="text-xs md:text-sm text-muted-foreground">
+                Complete mais cursos e atualize seu perfil para aumentar suas chances!
+              </p>
+              <Link to="/perfil">
+                <Button variant="link" className="px-0 mt-2 h-auto text-xs md:text-sm">
+                  Ir para perfil →
+                </Button>
+              </Link>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
     </div>
   );
 }
