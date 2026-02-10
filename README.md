@@ -13,6 +13,8 @@ Plataforma completa de educação e empregabilidade com 13 telas específicas, i
 - ✅ **Modo Escuro/Claro** - Sistema de temas completo
 - ✅ **Gamificação** - Pontos, badges e sistema de recompensas
 - ✅ **Match de Competências** - Sistema inteligente de compatibilidade
+- ✅ **Candidatura com Currículo** - Upload automático e envio do link para a empresa
+- ✅ **Status Visual da Vaga** - Vaga aplicada fica com tonalidade diferente e botão desabilitado
 - ✅ **Painel Admin** - Métricas (inscritos e cursos) + CRUD com abas e busca
 - ✅ **Empresa de Cursos Online** - Painel completo, Financeiro, Indicações e Página do Curso
 - ✅ **Doações por Perfil** - Página de doações com planos e permissões por tipo de usuário
@@ -137,6 +139,8 @@ Endpoints importantes (desenvolvimento):
 - `DELETE /api/applications/:applicationId` — excluir candidatura
 
 > **Fluxo de vagas:** A empresa cria vagas pelo painel (`/vagas`). As vagas aparecem automaticamente para **estudantes** e **administradores** na mesma rota `/vagas`, que busca as vagas ativas do backend via `GET /api/jobs`.
+> **Candidaturas:** Ao clicar em **Candidatar-se**, o sistema faz upload do currículo (se necessário) e envia o `resumeUrl` junto com os dados do candidato. A vaga aplicada fica com tonalidade diferente e o botão fica desabilitado.
+> **Rotas de empresa:** A página de candidatos é acessada em `/candidatos` (menu e dashboard).
 
 Exemplo de curl para registro:
 
@@ -425,3 +429,7 @@ node index.js
 cd "C:\Users\a92207984\Desktop\Projeto feito com Valnei e Wesley\app-Desigualdade-02\frontend"
 $env:DISABLE_ELECTRON="true"
 npx vite
+
+O frontend inicia em http://localhost:5173 (ou 5174)
+
+Depois abra o navegador em http://localhost:5173.
