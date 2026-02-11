@@ -11,6 +11,14 @@ dist-electron/
 
 # Local DB
 server/data.sqlite
+backend/data.sqlite
+backend/server/data.sqlite
+
+# Backend logs
+backend/*.log
+
+# Local test artifacts
+scripts/curriculum_teste.pdf
 
 # Editor directories
 .vscode/

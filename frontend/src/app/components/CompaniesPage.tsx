@@ -2,8 +2,17 @@ import React from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/app/components/ui/card';
 import { Badge } from '@/app/components/ui/badge';
 import { mockCompanies } from '@/app/data/mockData';
-import { Building2, Briefcase, Users, CheckCircle2 } from 'lucide-react';
+import { Briefcase, Users, CheckCircle2 } from 'lucide-react';
 import { Progress } from '@/app/components/ui/progress';
+import techImage from '@/assets/partners/partner-1.png';
+import marketingImage from '@/assets/partners/partner-2.jpg';
+import designImage from '@/assets/partners/partner-3.jpg';
+
+const companyTypeImages: Record<string, string> = {
+  Tecnologia: techImage,
+  Marketing: marketingImage,
+  Design: designImage,
+};
 
 export function CompaniesPage() {
   return (
@@ -19,9 +28,16 @@ export function CompaniesPage() {
             <CardHeader>
               <div className="flex items-start justify-between">
                 <div className="flex items-center gap-3">
-                  <div className="text-4xl">{company.logo}</div>
+                  <div className="h-12 w-12 overflow-hidden rounded-lg border bg-muted">
+                    <img
+                      className="h-full w-full object-cover"
+                      src={companyTypeImages[company.type] || techImage}
+                      alt={`Logo ${company.name}`}
+                    />
+                  </div>
                   <div>
                     <CardTitle>{company.name}</CardTitle>
+                    <CardDescription>{company.type}</CardDescription>
                     {company.verified && (
                       <Badge variant="secondary" className="mt-1">
                         <CheckCircle2 className="h-3 w-3 mr-1" />

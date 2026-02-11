@@ -145,6 +145,7 @@ export const ROLE_ROUTES = {
     '/dashboard',
     '/vagas',
     '/candidatos',
+    '/empresas',
     '/perfil',
     '/metricas',
     '/suporte',

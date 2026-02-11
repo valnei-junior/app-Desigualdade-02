@@ -557,49 +557,57 @@ export function Dashboard() {
 
         {/* Cards Principais */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4">
-          <Card className="bg-gradient-to-br from-blue-50/60 to-background">
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Novos Currículos</CardTitle>
-              <FileText className="h-4 w-4 text-blue-600" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">{newResumes}</div>
-              <p className="text-xs text-muted-foreground">Recebidos esta semana</p>
-            </CardContent>
-          </Card>
+          <Link to="/candidatos" className="block">
+            <Card className="bg-gradient-to-br from-blue-50/60 to-background transition hover:shadow-md">
+              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                <CardTitle className="text-sm font-medium">Novos Currículos</CardTitle>
+                <FileText className="h-4 w-4 text-blue-600" />
+              </CardHeader>
+              <CardContent>
+                <div className="text-2xl font-bold">{newResumes}</div>
+                <p className="text-xs text-muted-foreground">Recebidos esta semana</p>
+              </CardContent>
+            </Card>
+          </Link>
 
-          <Card className="bg-gradient-to-br from-emerald-50/60 to-background">
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Entrevistas Agendadas</CardTitle>
-              <UserCheck className="h-4 w-4 text-emerald-600" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">{scheduledInterviews}</div>
-              <p className="text-xs text-muted-foreground">Próximos 7 dias</p>
-            </CardContent>
-          </Card>
+          <Link to="/vagas" className="block">
+            <Card className="bg-gradient-to-br from-emerald-50/60 to-background transition hover:shadow-md">
+              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                <CardTitle className="text-sm font-medium">Entrevistas Agendadas</CardTitle>
+                <UserCheck className="h-4 w-4 text-emerald-600" />
+              </CardHeader>
+              <CardContent>
+                <div className="text-2xl font-bold">{scheduledInterviews}</div>
+                <p className="text-xs text-muted-foreground">Próximos 7 dias</p>
+              </CardContent>
+            </Card>
+          </Link>
 
-          <Card className="bg-gradient-to-br from-amber-50/60 to-background">
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Prazos Próximos</CardTitle>
-              <Clock className="h-4 w-4 text-amber-600" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">{upcomingDeadlines}</div>
-              <p className="text-xs text-muted-foreground">Vagas vencendo em breve</p>
-            </CardContent>
-          </Card>
+          <Link to="/vagas" className="block">
+            <Card className="bg-gradient-to-br from-amber-50/60 to-background transition hover:shadow-md">
+              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                <CardTitle className="text-sm font-medium">Prazos Próximos</CardTitle>
+                <Clock className="h-4 w-4 text-amber-600" />
+              </CardHeader>
+              <CardContent>
+                <div className="text-2xl font-bold">{upcomingDeadlines}</div>
+                <p className="text-xs text-muted-foreground">Vagas vencendo em breve</p>
+              </CardContent>
+            </Card>
+          </Link>
 
-          <Card className="bg-gradient-to-br from-violet-50/60 to-background">
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Mensagens Pendentes</CardTitle>
-              <Mail className="h-4 w-4 text-violet-600" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">{pendingMessages}</div>
-              <p className="text-xs text-muted-foreground">Não respondidas</p>
-            </CardContent>
-          </Card>
+          <Link to="/vagas" className="block">
+            <Card className="bg-gradient-to-br from-violet-50/60 to-background transition hover:shadow-md">
+              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                <CardTitle className="text-sm font-medium">Mensagens Pendentes</CardTitle>
+                <Mail className="h-4 w-4 text-violet-600" />
+              </CardHeader>
+              <CardContent>
+                <div className="text-2xl font-bold">{pendingMessages}</div>
+                <p className="text-xs text-muted-foreground">Não respondidas</p>
+              </CardContent>
+            </Card>
+          </Link>
         </div>
 
         {/* Alertas e Notificações */}
@@ -628,7 +636,7 @@ export function Dashboard() {
                 </div>
                 <Badge className="bg-blue-100 text-blue-700 hover:bg-blue-100">Novo</Badge>
               </div>
-              <Link to="/vagas">
+              <Link to="/candidatos">
                 <Button variant="ghost" size="sm" className="h-8 text-xs">
                   Ver candidatos →
                 </Button>
@@ -719,7 +727,7 @@ export function Dashboard() {
                 Gerenciar vagas
               </Button>
             </Link>
-            <Link to="/empresas">
+            <Link to="/candidatos">
               <Button size="sm" variant="outline" className="gap-2">
                 <Users className="h-4 w-4" />
                 Ver candidatos

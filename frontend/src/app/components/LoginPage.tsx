@@ -5,24 +5,62 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/app
 import { Input } from '@/app/components/ui/input';
 import { Label } from '@/app/components/ui/label';
 import { useUser } from '@/app/contexts/UserContext';
+import { requestEmailVerification } from '@/app/services/api';
+import { toast } from 'sonner';
 
 export function LoginPage() {
   const navigate = useNavigate();
   const { loginWithCredentials } = useUser();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [otp, setOtp] = useState('');
+  const [requires2fa, setRequires2fa] = useState(false);
+  const [requires2faSetup, setRequires2faSetup] = useState(false);
+  const [emailNotVerified, setEmailNotVerified] = useState(false);
+  const [isSendingCode, setIsSendingCode] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     (async () => {
-      const ok = await loginWithCredentials(email, password);
-      if (ok) {
+      setError(null);
+      setEmailNotVerified(false);
+      setRequires2faSetup(false);
+      const result = await loginWithCredentials(email, password, requires2fa ? otp : undefined);
+      if (result?.ok) {
         navigate('/dashboard');
-      } else {
-        setError('Credenciais inválidas.');
+        return;
       }
+      if (result?.requires2fa) {
+        setRequires2fa(true);
+        setError('Digite o código do autenticador para continuar.');
+        return;
+      }
+      if (result?.emailNotVerified) {
+        setEmailNotVerified(true);
+        setError('E-mail não verificado. Envie o código e confirme.');
+        return;
+      }
+      if (result?.requires2faSetup) {
+        setRequires2faSetup(true);
+        setError('Você precisa configurar o 2FA antes de entrar. Conclua o cadastro ou peça suporte.');
+        return;
+      }
+      setError('Credenciais inválidas.');
     })();
+  };
+
+  const handleSendVerification = async () => {
+    if (!email) return;
+    setIsSendingCode(true);
+    try {
+      await requestEmailVerification({ email });
+      toast.success('Código de verificação enviado.');
+    } catch (err) {
+      toast.error('Não foi possível enviar o código.');
+    } finally {
+      setIsSendingCode(false);
+    }
   };
 
   return (
@@ -70,11 +108,32 @@ export function LoginPage() {
               <Input id="password" type="password" required value={password} onChange={(e) => setPassword(e.target.value)} />
             </div>
 
+            {requires2fa && (
+              <div className="space-y-2">
+                <Label htmlFor="otp">Código 2FA</Label>
+                <Input id="otp" value={otp} onChange={(e) => setOtp(e.target.value)} placeholder="123456" />
+              </div>
+            )}
+
             <div className="text-sm">
               <button type="button" onClick={() => navigate('/esqueci-senha')} className="text-blue-600 hover:underline">Esqueci minha senha</button>
             </div>
 
             {error && <p className="text-sm text-red-600">{error}</p>}
+
+            {requires2faSetup && (
+              <Alert>
+                <AlertDescription className="text-sm">
+                  Finalize a configuração de 2FA no fluxo de cadastro (etapa final) e tente novamente. Se já concluiu, insira o código do autenticador.
+                </AlertDescription>
+              </Alert>
+            )}
+
+            {emailNotVerified && (
+              <Button type="button" variant="outline" onClick={handleSendVerification} disabled={isSendingCode}>
+                {isSendingCode ? 'Enviando...' : 'Enviar código de verificação'}
+              </Button>
+            )}
 
             <div className="flex gap-3">
               <Button type="submit" className="flex-1">Entrar</Button>

@@ -10,6 +10,7 @@ import { Alert, AlertDescription } from '@/app/components/ui/alert';
 import { Checkbox } from '@/app/components/ui/checkbox';
 import { Upload, User, Building2, GraduationCap, Shield, Info } from 'lucide-react';
 import { useUser } from '@/app/contexts/UserContext';
+import { requestEmailVerification, setupTwoFactor, verifyEmail, verifyTwoFactor } from '@/app/services/api';
 import { ROLES, ROLE_LABELS, ROLE_DESCRIPTIONS } from '@/app/constants/roles';
 
 export function RegisterPage() {
@@ -34,9 +35,24 @@ export function RegisterPage() {
     jobTypesOffered: [],
     coursePlatformName: '',
     courseCategories: [],
+    acceptTerms: false,
+    acceptSecurity: false,
+    acceptLgpd: false,
   });
 
   const [errors, setErrors] = useState({});
+  const [pendingVerification, setPendingVerification] = useState(null);
+  const [emailCode, setEmailCode] = useState('');
+  const [emailVerified, setEmailVerified] = useState(false);
+  const [twoFactorSecret, setTwoFactorSecret] = useState('');
+  const [twoFactorUrl, setTwoFactorUrl] = useState('');
+  const [twoFactorToken, setTwoFactorToken] = useState('');
+  const [twoFactorVerified, setTwoFactorVerified] = useState(false);
+  const [isSendingVerification, setIsSendingVerification] = useState(false);
+  const [isVerifyingEmail, setIsVerifyingEmail] = useState(false);
+  const [isSettingUp2fa, setIsSettingUp2fa] = useState(false);
+  const [isVerifying2fa, setIsVerifying2fa] = useState(false);
+  const [verificationError, setVerificationError] = useState('');
 
   const validateForm = () => {
     const newErrors = {};
@@ -47,6 +63,9 @@ export function RegisterPage() {
     if (!formData.password) newErrors.password = 'Senha é obrigatória';
     else if (formData.password.length < 6) newErrors.password = 'Senha deve ter pelo menos 6 caracteres';
     if (formData.password !== formData.confirmPassword) newErrors.confirmPassword = 'As senhas não coincidem';
+    if (!formData.acceptTerms) newErrors.acceptTerms = 'Aceite os Termos de Uso';
+    if (!formData.acceptSecurity) newErrors.acceptSecurity = 'Aceite os Termos de Segurança';
+    if (!formData.acceptLgpd) newErrors.acceptLgpd = 'Aceite a LGPD';
 
     if (formData.role === ROLES.STUDENT) {
       if (!formData.age) newErrors.age = 'Idade é obrigatória';
@@ -81,6 +100,9 @@ export function RegisterPage() {
       email: formData.email,
       role: formData.role,
       createdAt: new Date().toISOString(),
+      acceptTerms: formData.acceptTerms,
+      acceptSecurity: formData.acceptSecurity,
+      acceptLgpd: formData.acceptLgpd,
     };
 
     if (formData.role === ROLES.STUDENT) {
@@ -115,7 +137,19 @@ export function RegisterPage() {
       const result = await registerUser(userData, formData.password);
       const ok = typeof result === 'boolean' ? result : result?.ok;
       if (ok) {
+        if (result?.requiresEmailVerification || result?.requiresTwoFactor) {
+          setPendingVerification({ userId: result?.user?.id, email: result?.user?.email });
+          setVerificationError('');
+          return;
+        }
         navigate('/dashboard');
+      } else if (result?.error === 'consent_required') {
+        setErrors({
+          general: 'Você precisa aceitar os termos para continuar.',
+          acceptTerms: 'Aceite os Termos de Uso',
+          acceptSecurity: 'Aceite os Termos de Segurança',
+          acceptLgpd: 'Aceite a LGPD',
+        });
       } else {
         setErrors({ general: result?.error || 'Não foi possível criar a conta. Verifique os dados.' });
       }
@@ -124,6 +158,135 @@ export function RegisterPage() {
       console.error('register error', err);
     }
   };
+
+  const handleSendVerification = async () => {
+    if (!pendingVerification?.email && !pendingVerification?.userId) return;
+    setIsSendingVerification(true);
+    setVerificationError('');
+    try {
+      await requestEmailVerification({ userId: pendingVerification.userId, email: pendingVerification.email });
+    } catch (err) {
+      setVerificationError('Não foi possível enviar o código de verificação.');
+    } finally {
+      setIsSendingVerification(false);
+    }
+  };
+
+  const handleVerifyEmail = async () => {
+    if (!emailCode || !pendingVerification?.userId) return;
+    setIsVerifyingEmail(true);
+    setVerificationError('');
+    try {
+      await verifyEmail({ userId: pendingVerification.userId, code: emailCode });
+      setEmailVerified(true);
+    } catch (err) {
+      setVerificationError('Código inválido ou expirado.');
+    } finally {
+      setIsVerifyingEmail(false);
+    }
+  };
+
+  const handleSetup2fa = async () => {
+    if (!pendingVerification?.userId) return;
+    setIsSettingUp2fa(true);
+    setVerificationError('');
+    try {
+      const data = await setupTwoFactor({ userId: pendingVerification.userId, email: pendingVerification.email });
+      setTwoFactorSecret(data.secret || '');
+      setTwoFactorUrl(data.otpauthUrl || '');
+    } catch (err) {
+      setVerificationError('Não foi possível configurar o 2FA.');
+    } finally {
+      setIsSettingUp2fa(false);
+    }
+  };
+
+  const handleVerify2fa = async () => {
+    if (!pendingVerification?.userId || !twoFactorToken) return;
+    setIsVerifying2fa(true);
+    setVerificationError('');
+    try {
+      await verifyTwoFactor({ userId: pendingVerification.userId, token: twoFactorToken });
+      setTwoFactorVerified(true);
+      setTwoFactorToken('');
+    } catch (err) {
+      setVerificationError('Código 2FA inválido.');
+    } finally {
+      setIsVerifying2fa(false);
+    }
+  };
+
+  if (pendingVerification) {
+    const canFinish = emailVerified && twoFactorVerified;
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center p-4">
+        <Card className="w-full max-w-2xl">
+          <CardHeader>
+            <CardTitle className="text-xl">Finalize seu cadastro</CardTitle>
+            <CardDescription>
+              Para concluir, verifique seu e-mail e ative o 2FA.
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-6">
+            {verificationError && (
+              <Alert variant="destructive">
+                <AlertDescription>{verificationError}</AlertDescription>
+              </Alert>
+            )}
+
+            <div className="space-y-3">
+              <h3 className="text-sm font-semibold text-muted-foreground uppercase tracking-wide">Verificação de e-mail</h3>
+              <div className="flex flex-col md:flex-row gap-2">
+                <Button type="button" variant="outline" onClick={handleSendVerification} disabled={isSendingVerification}>
+                  {isSendingVerification ? 'Enviando...' : 'Enviar código'}
+                </Button>
+                <Input
+                  value={emailCode}
+                  onChange={(e) => setEmailCode(e.target.value)}
+                  placeholder="Código de verificação"
+                />
+                <Button type="button" onClick={handleVerifyEmail} disabled={isVerifyingEmail || emailVerified}>
+                  {emailVerified ? 'Verificado' : isVerifyingEmail ? 'Verificando...' : 'Confirmar'}
+                </Button>
+              </div>
+            </div>
+
+            <div className="space-y-3">
+              <h3 className="text-sm font-semibold text-muted-foreground uppercase tracking-wide">Autenticação em duas etapas (2FA)</h3>
+              <div className="flex flex-col md:flex-row gap-2">
+                <Button type="button" variant="outline" onClick={handleSetup2fa} disabled={isSettingUp2fa}>
+                  {isSettingUp2fa ? 'Gerando...' : 'Gerar 2FA'}
+                </Button>
+                <Input
+                  value={twoFactorToken}
+                  onChange={(e) => setTwoFactorToken(e.target.value)}
+                  placeholder="Código do autenticador"
+                />
+                <Button type="button" onClick={handleVerify2fa} disabled={isVerifying2fa || twoFactorVerified}>
+                  {twoFactorVerified ? 'Ativado' : isVerifying2fa ? 'Verificando...' : 'Ativar'}
+                </Button>
+              </div>
+              {twoFactorSecret && (
+                <div className="text-xs text-muted-foreground space-y-1">
+                  <p>Chave secreta: <span className="font-mono">{twoFactorSecret}</span></p>
+                  {twoFactorUrl && (
+                    <p>URL otpauth: <span className="font-mono break-all">{twoFactorUrl}</span></p>
+                  )}
+                </div>
+              )}
+            </div>
+
+            <div className="flex flex-col sm:flex-row gap-3">
+              <Button type="button" variant="outline" onClick={() => navigate('/')}>Voltar</Button>
+              <Button type="button" className="flex-1" disabled={!canFinish} onClick={() => navigate('/login')}>
+                {canFinish ? 'Ir para login' : 'Complete as etapas acima'}
+              </Button>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
 
   const getRoleIcon = (role) => {
     switch (role) {
@@ -540,6 +703,39 @@ export function RegisterPage() {
               </Alert>
             )}
 
+            <div className="space-y-2 border rounded-lg p-3">
+              <p className="text-sm font-semibold">Termos, Segurança e LGPD</p>
+              <div className="flex items-start space-x-2">
+                <Checkbox
+                  id="accept-terms"
+                  checked={formData.acceptTerms}
+                  onCheckedChange={(value) => setFormData({ ...formData, acceptTerms: !!value })}
+                />
+                <Label htmlFor="accept-terms" className="text-sm font-normal">Aceito os Termos de Uso</Label>
+              </div>
+              {errors.acceptTerms && <p className="text-xs text-red-500">{errors.acceptTerms}</p>}
+
+              <div className="flex items-start space-x-2">
+                <Checkbox
+                  id="accept-security"
+                  checked={formData.acceptSecurity}
+                  onCheckedChange={(value) => setFormData({ ...formData, acceptSecurity: !!value })}
+                />
+                <Label htmlFor="accept-security" className="text-sm font-normal">Aceito os Termos de Segurança</Label>
+              </div>
+              {errors.acceptSecurity && <p className="text-xs text-red-500">{errors.acceptSecurity}</p>}
+
+              <div className="flex items-start space-x-2">
+                <Checkbox
+                  id="accept-lgpd"
+                  checked={formData.acceptLgpd}
+                  onCheckedChange={(value) => setFormData({ ...formData, acceptLgpd: !!value })}
+                />
+                <Label htmlFor="accept-lgpd" className="text-sm font-normal">Aceito o tratamento de dados conforme LGPD</Label>
+              </div>
+              {errors.acceptLgpd && <p className="text-xs text-red-500">{errors.acceptLgpd}</p>}
+            </div>
+
             <div className="flex flex-col sm:flex-row gap-3 md:gap-4 pt-2">
               <Button
                 type="button"
@@ -555,7 +751,7 @@ export function RegisterPage() {
             </div>
 
             <p className="text-xs text-center text-muted-foreground">
-              Ao criar uma conta, você concorda com nossos Termos de Uso e Política de Privacidade
+              Os termos são obrigatórios no primeiro cadastro.
             </p>
           </form>
         </CardContent>

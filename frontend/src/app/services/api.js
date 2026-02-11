@@ -7,6 +7,16 @@ const getHeaders = () => ({
   'Content-Type': 'application/json',
 });
 
+const parseJsonResponse = async (response) => {
+  const text = await response.text();
+  if (!text) return {};
+  try {
+    return JSON.parse(text);
+  } catch (error) {
+    return { error: text };
+  }
+};
+
 // ==================== VAGAS (JOBS) ====================
 
 export const createJob = async (jobData) => {
@@ -15,39 +25,39 @@ export const createJob = async (jobData) => {
     headers: getHeaders(),
     body: JSON.stringify(jobData),
   });
-  
+
+  const data = await parseJsonResponse(response);
   if (!response.ok) {
-    const error = await response.json();
-    throw new Error(error.error || 'Erro ao criar vaga');
+    throw new Error(data.error || 'Erro ao criar vaga');
   }
-  
-  return response.json();
+
+  return data;
 };
 
 export const getCompanyJobs = async (companyId) => {
   const response = await fetch(`${API_BASE_URL}/jobs/company/${companyId}`, {
     headers: getHeaders(),
   });
-  
+
+  const data = await parseJsonResponse(response);
   if (!response.ok) {
-    const error = await response.json();
-    throw new Error(error.error || 'Erro ao buscar vagas');
+    throw new Error(data.error || 'Erro ao buscar vagas');
   }
-  
-  return response.json();
+
+  return data;
 };
 
 export const getAllJobs = async () => {
   const response = await fetch(`${API_BASE_URL}/jobs`, {
     headers: getHeaders(),
   });
-  
+
+  const data = await parseJsonResponse(response);
   if (!response.ok) {
-    const error = await response.json();
-    throw new Error(error.error || 'Erro ao buscar vagas');
+    throw new Error(data.error || 'Erro ao buscar vagas');
   }
-  
-  return response.json();
+
+  return data;
 };
 
 export const updateJob = async (jobId, jobData) => {
@@ -56,13 +66,13 @@ export const updateJob = async (jobId, jobData) => {
     headers: getHeaders(),
     body: JSON.stringify(jobData),
   });
-  
+
+  const data = await parseJsonResponse(response);
   if (!response.ok) {
-    const error = await response.json();
-    throw new Error(error.error || 'Erro ao atualizar vaga');
+    throw new Error(data.error || 'Erro ao atualizar vaga');
   }
-  
-  return response.json();
+
+  return data;
 };
 
 export const deleteJob = async (jobId) => {
@@ -70,13 +80,13 @@ export const deleteJob = async (jobId) => {
     method: 'DELETE',
     headers: getHeaders(),
   });
-  
+
+  const data = await parseJsonResponse(response);
   if (!response.ok) {
-    const error = await response.json();
-    throw new Error(error.error || 'Erro ao deletar vaga');
+    throw new Error(data.error || 'Erro ao deletar vaga');
   }
-  
-  return response.json();
+
+  return data;
 };
 
 // ==================== CANDIDATURAS (APPLICATIONS) ====================
@@ -87,26 +97,26 @@ export const applyToJob = async (applicationData) => {
     headers: getHeaders(),
     body: JSON.stringify(applicationData),
   });
-  
+
+  const data = await parseJsonResponse(response);
   if (!response.ok) {
-    const error = await response.json();
-    throw new Error(error.error || 'Erro ao candidatar-se');
+    throw new Error(data.error || 'Erro ao candidatar-se');
   }
-  
-  return response.json();
+
+  return data;
 };
 
 export const getCompanyApplications = async (companyId) => {
   const response = await fetch(`${API_BASE_URL}/applications/company/${companyId}`, {
     headers: getHeaders(),
   });
-  
+
+  const data = await parseJsonResponse(response);
   if (!response.ok) {
-    const error = await response.json();
-    throw new Error(error.error || 'Erro ao buscar candidatos');
+    throw new Error(data.error || 'Erro ao buscar candidatos');
   }
-  
-  return response.json();
+
+  return data;
 };
 
 export const updateApplicationStatus = async (applicationId, status) => {
@@ -115,13 +125,13 @@ export const updateApplicationStatus = async (applicationId, status) => {
     headers: getHeaders(),
     body: JSON.stringify({ status }),
   });
-  
+
+  const data = await parseJsonResponse(response);
   if (!response.ok) {
-    const error = await response.json();
-    throw new Error(error.error || 'Erro ao atualizar candidatura');
+    throw new Error(data.error || 'Erro ao atualizar candidatura');
   }
-  
-  return response.json();
+
+  return data;
 };
 
 export const approveApplication = async (applicationId) => {
@@ -137,13 +147,13 @@ export const deleteApplication = async (applicationId) => {
     method: 'DELETE',
     headers: getHeaders(),
   });
-  
+
+  const data = await parseJsonResponse(response);
   if (!response.ok) {
-    const error = await response.json();
-    throw new Error(error.error || 'Erro ao deletar candidatura');
+    throw new Error(data.error || 'Erro ao deletar candidatura');
   }
-  
-  return response.json();
+
+  return data;
 };
 
 // ==================== UPLOAD DE CURRÍCULO ====================
@@ -155,16 +165,19 @@ export const uploadResume = async (file, userId) => {
 
   const response = await fetch(`${API_BASE_URL}/upload-resume`, {
     method: 'POST',
+    headers: {
+      'x-filename': file?.name || 'curriculum.pdf',
+    },
     // No auth header for local backend; content-type is set automatically for FormData
     body: formData,
   });
-  
+
+  const data = await parseJsonResponse(response);
   if (!response.ok) {
-    const error = await response.json();
-    throw new Error(error.error || 'Erro ao fazer upload do currículo');
+    throw new Error(data.error || 'Erro ao fazer upload do currículo');
   }
-  
-  return response.json();
+
+  return data;
 };
 
 // ==================== AUTH / PASSWORD RESET ====================
@@ -213,4 +226,122 @@ export const resetPassword = async (token, password) => {
     console.error('resetPassword error:', err);
     throw err;
   }
+};
+
+// ==================== PERFIL / SEGURANÇA ====================
+
+export const getUserProfile = async (userId) => {
+  const response = await fetch(`${API_BASE_URL}/users/${userId}`, {
+    headers: getHeaders(),
+  });
+
+  const data = await parseJsonResponse(response);
+  if (!response.ok) {
+    throw new Error(data.error || 'Erro ao buscar perfil');
+  }
+
+  return data;
+};
+
+export const updateUserProfile = async (userId, payload) => {
+  const response = await fetch(`${API_BASE_URL}/users/${userId}`, {
+    method: 'PUT',
+    headers: getHeaders(),
+    body: JSON.stringify(payload),
+  });
+
+  const data = await parseJsonResponse(response);
+  if (!response.ok) {
+    throw new Error(data.error || 'Erro ao atualizar perfil');
+  }
+
+  return data;
+};
+
+export const getSecurityStatus = async (userId) => {
+  const response = await fetch(`${API_BASE_URL}/auth/security/${userId}`, {
+    headers: getHeaders(),
+  });
+
+  const data = await parseJsonResponse(response);
+  if (!response.ok) {
+    throw new Error(data.error || 'Erro ao carregar segurança');
+  }
+
+  return data;
+};
+
+export const requestEmailVerification = async (payload) => {
+  const response = await fetch(`${API_BASE_URL}/auth/request-email-verification`, {
+    method: 'POST',
+    headers: getHeaders(),
+    body: JSON.stringify(payload),
+  });
+
+  const data = await parseJsonResponse(response);
+  if (!response.ok) {
+    throw new Error(data.error || 'Erro ao enviar verificação');
+  }
+
+  return data;
+};
+
+export const verifyEmail = async (payload) => {
+  const response = await fetch(`${API_BASE_URL}/auth/verify-email`, {
+    method: 'POST',
+    headers: getHeaders(),
+    body: JSON.stringify(payload),
+  });
+
+  const data = await parseJsonResponse(response);
+  if (!response.ok) {
+    throw new Error(data.error || 'Erro ao verificar e-mail');
+  }
+
+  return data;
+};
+
+export const setupTwoFactor = async (payload) => {
+  const response = await fetch(`${API_BASE_URL}/auth/2fa/setup`, {
+    method: 'POST',
+    headers: getHeaders(),
+    body: JSON.stringify(payload),
+  });
+
+  const data = await parseJsonResponse(response);
+  if (!response.ok) {
+    throw new Error(data.error || 'Erro ao configurar 2FA');
+  }
+
+  return data;
+};
+
+export const verifyTwoFactor = async (payload) => {
+  const response = await fetch(`${API_BASE_URL}/auth/2fa/verify`, {
+    method: 'POST',
+    headers: getHeaders(),
+    body: JSON.stringify(payload),
+  });
+
+  const data = await parseJsonResponse(response);
+  if (!response.ok) {
+    throw new Error(data.error || 'Erro ao verificar 2FA');
+  }
+
+  return data;
+};
+
+export const disableTwoFactor = async (payload) => {
+  const response = await fetch(`${API_BASE_URL}/auth/2fa/disable`, {
+    method: 'POST',
+    headers: getHeaders(),
+    body: JSON.stringify(payload),
+  });
+
+  const data = await parseJsonResponse(response);
+  if (!response.ok) {
+    throw new Error(data.error || 'Erro ao desativar 2FA');
+  }
+
+  return data;
 };

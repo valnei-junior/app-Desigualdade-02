@@ -44,17 +44,25 @@ export function UserProvider({ children }) {
       let json = null;
       try { json = await resp.json(); } catch {}
       if (resp.ok) {
-        setUser(json.user);
-        try {
-          const key = 'admin_users';
-          const raw = localStorage.getItem(key);
-          const list = raw ? JSON.parse(raw) : [];
-          const next = list.some((u) => u.email === json.user.email)
-            ? list.map((u) => (u.email === json.user.email ? json.user : u))
-            : [...list, json.user];
-          localStorage.setItem(key, JSON.stringify(next));
-        } catch {}
-        return { ok: true };
+        if (!json?.requiresEmailVerification && !json?.requiresTwoFactor) {
+          setUser(json.user);
+          try {
+            const key = 'admin_users';
+            const raw = localStorage.getItem(key);
+            const list = raw ? JSON.parse(raw) : [];
+            const next = list.some((u) => u.email === json.user.email)
+              ? list.map((u) => (u.email === json.user.email ? json.user : u))
+              : [...list, json.user];
+            localStorage.setItem(key, JSON.stringify(next));
+          } catch {}
+        }
+        return {
+          ok: true,
+          user: json.user,
+          requiresEmailVerification: !!json?.requiresEmailVerification,
+          requiresTwoFactor: !!json?.requiresTwoFactor,
+          verificationSent: !!json?.verificationSent,
+        };
       }
       console.error('API register error', json);
       return { ok: false, error: json?.error || 'Não foi possível criar a conta. Verifique os dados.' };
@@ -64,22 +72,31 @@ export function UserProvider({ children }) {
     }
   };
 
-  const loginWithCredentials = async (email, password) => {
+  const loginWithCredentials = async (email, password, otp) => {
     try {
       const resp = await fetch(`${apiBase.replace(/\/+$/, '')}/api/login`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, password }),
+        body: JSON.stringify({ email, password, otp }),
       });
       const json = await resp.json();
       if (resp.ok) {
         setUser(json.user);
-        return true;
+        return { ok: true };
       }
-      return false;
+      if (json?.error === '2fa_required') {
+        return { ok: false, requires2fa: true };
+      }
+      if (json?.error === 'email_not_verified') {
+        return { ok: false, emailNotVerified: true };
+      }
+      if (json?.error === '2fa_setup_required') {
+        return { ok: false, requires2faSetup: true };
+      }
+      return { ok: false, error: json?.error || 'invalid_credentials' };
     } catch (err) {
       console.error('API login failed', err);
-      return false;
+      return { ok: false, error: 'server_unavailable' };
     }
   };
 

@@ -70,7 +70,7 @@ pnpm install
 Você pode iniciar **backend + frontend** com um único comando na raiz:
 
 ```powershell
-cd "D:\Desktop\Ultimo projeto de Valtemir\app-Desigualdade-"
+cd "C:\Users\a92207984\Desktop\Projeto feito com Valnei e Wesley\app-Desigualdade-02"
 npm run dev
 ```
 
@@ -79,7 +79,7 @@ Ou, se preferir em **terminais separados**:
 Terminal 1 — backend (Express + SQLite):
 
 ```powershell
-cd "D:\Desktop\Ultimo projeto de Valtemir\app-Desigualdade-\backend"
+cd "C:\Users\a92207984\Desktop\Projeto feito com Valnei e Wesley\app-Desigualdade-02\backend"
 npm run start
 # O servidor será iniciado em http://localhost:4000 por padrão
 ```
@@ -87,7 +87,7 @@ npm run start
 Terminal 2 — frontend (Vite, sem Electron):
 
 ```powershell
-cd "D:\Desktop\Ultimo projeto de Valtemir\app-Desigualdade-\frontend"
+cd "C:\Users\a92207984\Desktop\Projeto feito com Valnei e Wesley\app-Desigualdade-02\frontend"
 $env:DISABLE_ELECTRON='true'
 npx vite
 ```
@@ -120,10 +120,11 @@ curl http://localhost:4000/api/health
 Endpoints importantes (desenvolvimento):
 
 **Autenticação:**
-- `POST /api/register` — registrar usuário (body JSON: `email`, `password`, `name`, ...)
-- `POST /api/login` — autenticar usuário (body JSON: `email`, `password`)
+- `POST /api/register` — registrar usuário (body JSON: `email`, `password`, `name`, ...). Exige aceites de Termos/Security/LGPD.
+- `POST /api/login` — autenticar usuário (body JSON: `email`, `password`, `otp?`) e retorna `{ user, token }` (JWT HS256) quando válido.
 - `POST /api/auth/forgot-password` — solicitar redefinição de senha (body JSON: `email`)
 - `POST /api/auth/reset-password` — redefinir senha (body JSON: `token`, `password`)
+  - Fluxo seguro exigido: termos obrigatórios no cadastro → verificação de e-mail → setup 2FA → login com senha + TOTP (JWT retornado no login).
 
 **Vagas (Jobs):**
 - `GET  /api/jobs` — listar todas as vagas ativas (estudantes e admin)
@@ -169,6 +170,11 @@ curl -X POST http://localhost:4000/api/jobs -H "Content-Type: application/json" 
    - **Admin** - Para acesso total
 4. Preencha os dados
 5. Clique em "Criar Conta"
+6. **Finalize cadastro seguro:**
+  - Se termos não forem marcados → cadastro bloqueia.
+  - Com termos marcados → receba código de e-mail, confirme.
+  - Gere e confirme 2FA (TOTP).
+  - Faça login com senha + TOTP para receber o JWT.
 
 Para instruções detalhadas, veja [COMO_TESTAR_ROLES.md](./COMO_TESTAR_ROLES.md)
 

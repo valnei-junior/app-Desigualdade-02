@@ -27,8 +27,8 @@ export default defineConfig({
               },
             },
           ]),
+          electronRenderer(),
         ]),
-    electronRenderer(),
   ],
   resolve: {
     alias: {

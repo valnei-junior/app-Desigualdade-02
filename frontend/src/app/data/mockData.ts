@@ -71,6 +71,7 @@ export const mockCompanies = [
   {
     id: '1',
     name: 'TechCorp',
+    type: 'Tecnologia',
     openPositions: 15,
     hires: 120,
     verified: true,
@@ -79,6 +80,7 @@ export const mockCompanies = [
   {
     id: '2',
     name: 'Marketing Pro',
+    type: 'Marketing',
     openPositions: 8,
     hires: 85,
     verified: true,
@@ -87,6 +89,7 @@ export const mockCompanies = [
   {
     id: '3',
     name: 'Design Studio',
+    type: 'Design',
     openPositions: 12,
     hires: 95,
     verified: true,

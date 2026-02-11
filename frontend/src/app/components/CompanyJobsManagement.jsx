@@ -26,6 +26,9 @@ import * as api from '@/app/services/api';
 
 // Mover o JobForm para fora do componente principal
 function JobForm({ formData, setFormData, isEdit, onCancel, onSave }) {
+  const [editingRequirementIndex, setEditingRequirementIndex] = useState(null);
+  const [editingRequirementValue, setEditingRequirementValue] = useState('');
+
   const addRequirement = () => {
     if (formData.newRequirement.trim()) {
       setFormData({
@@ -41,6 +44,29 @@ function JobForm({ formData, setFormData, isEdit, onCancel, onSave }) {
       ...formData,
       requirements: formData.requirements.filter((_, i) => i !== index),
     });
+  };
+
+  const startEditRequirement = (index, value) => {
+    setEditingRequirementIndex(index);
+    setEditingRequirementValue(value);
+  };
+
+  const saveEditedRequirement = () => {
+    if (editingRequirementValue.trim()) {
+      const newRequirements = [...formData.requirements];
+      newRequirements[editingRequirementIndex] = editingRequirementValue.trim();
+      setFormData({
+        ...formData,
+        requirements: newRequirements,
+      });
+      setEditingRequirementIndex(null);
+      setEditingRequirementValue('');
+    }
+  };
+
+  const cancelEditRequirement = () => {
+    setEditingRequirementIndex(null);
+    setEditingRequirementValue('');
   };
 
   return (
@@ -129,6 +155,18 @@ function JobForm({ formData, setFormData, isEdit, onCancel, onSave }) {
         </div>
       </div>
 
+      <div className="grid grid-cols-2 gap-4">
+        <div className="space-y-2">
+          <Label htmlFor="deadline">Prazo de encerramento</Label>
+          <Input
+            id="deadline"
+            type="date"
+            value={formData.deadline}
+            onChange={(e) => setFormData({ ...formData, deadline: e.target.value })}
+          />
+        </div>
+      </div>
+
       <div className="space-y-2">
         <Label>Requisitos/Competências</Label>
         <div className="flex gap-2">
@@ -145,13 +183,69 @@ function JobForm({ formData, setFormData, isEdit, onCancel, onSave }) {
         {formData.requirements.length > 0 && (
           <div className="flex flex-wrap gap-2 mt-2">
             {formData.requirements.map((req, idx) => (
-              <Badge key={idx} variant="secondary" className="cursor-pointer hover:bg-destructive hover:text-destructive-foreground transition-colors" onClick={() => removeRequirement(idx)}>
-                {req} ✕
-              </Badge>
+              <div key={idx} className="flex items-center gap-1">
+                <Badge 
+                  variant="secondary" 
+                  className="cursor-pointer hover:bg-blue-500 hover:text-white transition-colors" 
+                  onClick={() => startEditRequirement(idx, req)}
+                  title="Clique para editar"
+                >
+                  {req}
+                </Badge>
+                <Button
+                  type="button"
+                  variant="ghost"
+                  size="sm"
+                  className="h-5 w-5 p-0 hover:bg-red-500 hover:text-white"
+                  onClick={() => removeRequirement(idx)}
+                  title="Clique para remover"
+                >
+                  ✕
+                </Button>
+              </div>
             ))}
           </div>
         )}
       </div>
+
+      {/* Modal para editar requisito */}
+      {editingRequirementIndex !== null && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 rounded-lg">
+          <Card className="w-96">
+            <CardHeader>
+              <CardTitle className="text-lg">Editar Requisito</CardTitle>
+              <CardDescription>Altere o nome do requisito/competência</CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <Input
+                value={editingRequirementValue}
+                onChange={(e) => setEditingRequirementValue(e.target.value)}
+                placeholder="Ex: React"
+                autoFocus
+                onKeyPress={(e) => {
+                  if (e.key === 'Enter') saveEditedRequirement();
+                  if (e.key === 'Escape') cancelEditRequirement();
+                }}
+              />
+              <div className="flex gap-2 justify-end">
+                <Button 
+                  type="button" 
+                  variant="outline" 
+                  onClick={cancelEditRequirement}
+                >
+                  Cancelar
+                </Button>
+                <Button 
+                  type="button" 
+                  onClick={saveEditedRequirement}
+                >
+                  Salvar
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+      )}
 
       <div className="flex justify-end gap-2 pt-4">
         <Button
@@ -183,6 +277,7 @@ export function CompanyJobsManagement() {
     type: '',
     location: '',
     salary: '',
+    deadline: '',
     requirements: [],
     newRequirement: '',
   });
@@ -215,6 +310,7 @@ export function CompanyJobsManagement() {
       type: '',
       location: '',
       salary: '',
+      deadline: '',
       requirements: [],
       newRequirement: '',
     });
@@ -236,6 +332,7 @@ export function CompanyJobsManagement() {
         type: formData.type,
         location: formData.location,
         salary: formData.salary,
+        deadline: formData.deadline,
         requirements: formData.requirements,
       };
 
@@ -267,6 +364,7 @@ export function CompanyJobsManagement() {
         type: formData.type,
         location: formData.location,
         salary: formData.salary,
+        deadline: formData.deadline,
         requirements: formData.requirements,
         active: selectedJob.active,
         applicants: selectedJob.applicants,
@@ -334,6 +432,7 @@ export function CompanyJobsManagement() {
       type: job.type,
       location: job.location,
       salary: job.salary,
+      deadline: job.deadline || '',
       requirements: job.requirements,
       newRequirement: '',
     });
@@ -426,6 +525,7 @@ export function CompanyJobsManagement() {
                     </div>
                     <CardDescription className="text-xs md:text-sm">
                       Criada em {new Date(job.createdAt).toLocaleDateString('pt-BR')}
+                      {job.deadline ? ` · Vence em ${new Date(job.deadline).toLocaleDateString('pt-BR')}` : ''}
                     </CardDescription>
                   </div>
                   <Badge variant={job.type === 'Estágio' ? 'secondary' : 'default'} className="text-xs shrink-0">

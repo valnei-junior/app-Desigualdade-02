@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/app/components/ui/card';
 import { Button } from '@/app/components/ui/button';
 import { Input } from '@/app/components/ui/input';
@@ -21,7 +21,7 @@ function computeMatch(jobId: string): number {
 }
 
 export function JobsPage() {
-  const { user } = useUser();
+  const { user, updateUser } = useUser();
   
   // Se for empresa, mostrar tela de gerenciamento
   if (user?.role === ROLES.COMPANY) {
@@ -31,6 +31,10 @@ export function JobsPage() {
   // Para estudantes e admin, mostrar tela de busca de vagas
   const [apiJobs, setApiJobs] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [appliedJobs, setAppliedJobs] = useState<string[]>([]);
+  const [pendingJob, setPendingJob] = useState<any | null>(null);
+  const [applyingJobId, setApplyingJobId] = useState<string | null>(null);
+  const resumeInputRef = useRef<HTMLInputElement | null>(null);
   const [filter, setFilter] = useState({
     area: 'all',
     type: 'all',
@@ -62,6 +66,14 @@ export function JobsPage() {
     loadJobs();
   }, []);
 
+  useEffect(() => {
+    if (Array.isArray(user?.appliedJobs)) {
+      setAppliedJobs(user.appliedJobs);
+    } else {
+      setAppliedJobs([]);
+    }
+  }, [user?.appliedJobs]);
+
   // Combinar vagas da API com mockJobs (mock como fallback/exemplo)
   const allJobs = [
     ...apiJobs,
@@ -75,21 +87,91 @@ export function JobsPage() {
     return true;
   });
 
+  const markApplied = (jobId: string, resumePatch?: { resumeUrl?: string; resumeFileName?: string }) => {
+    const nextApplied = Array.from(new Set([...(appliedJobs || []), jobId]));
+    setAppliedJobs(nextApplied);
+    if (updateUser) {
+      updateUser({
+        appliedJobs: nextApplied,
+        ...(resumePatch || {}),
+      });
+    }
+  };
+
   const handleApply = async (job: any) => {
     if (!user?.id) {
       toast.error('Faça login para se candidatar');
       return;
     }
+    if (appliedJobs.includes(job.id)) {
+      toast.info('Você já se candidatou a esta vaga');
+      return;
+    }
+    if (!user?.resumeUrl) {
+      setPendingJob(job);
+      resumeInputRef.current?.click();
+      return;
+    }
     try {
+      setApplyingJobId(job.id);
       await api.applyToJob({
         jobId: job.id,
         candidateId: user.id,
-        candidateData: { name: user.name, email: user.email },
+        candidateData: {
+          name: user.name,
+          email: user.email,
+          resumeUrl: user.resumeUrl,
+          resumeFileName: user.resumeFileName,
+        },
       });
       toast.success(`Candidatura enviada para "${job.title}"!`);
+      markApplied(job.id);
     } catch (error: any) {
       // For mock jobs that don't exist in DB, still show success
       toast.success(`Candidatura enviada para "${job.title}"!`);
+      markApplied(job.id);
+    } finally {
+      setApplyingJobId(null);
+    }
+  };
+
+  const handleResumeSelected = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    const job = pendingJob;
+    setPendingJob(null);
+    event.target.value = '';
+
+    if (!file) {
+      return;
+    }
+    if (!job || !user?.id) {
+      toast.error('Não foi possível enviar o currículo. Tente novamente.');
+      return;
+    }
+
+    try {
+      setApplyingJobId(job.id);
+      const upload = await api.uploadResume(file, user.id);
+      const resumeUrl = upload.signedUrl || upload.url;
+      const resumeFileName = upload.fileName || file.name;
+
+      await api.applyToJob({
+        jobId: job.id,
+        candidateId: user.id,
+        candidateData: {
+          name: user.name,
+          email: user.email,
+          resumeUrl,
+          resumeFileName,
+        },
+      });
+
+      toast.success(`Candidatura enviada para "${job.title}"!`);
+      markApplied(job.id, { resumeUrl, resumeFileName });
+    } catch (error: any) {
+      toast.error('Erro ao enviar currículo ou candidatura.');
+    } finally {
+      setApplyingJobId(null);
     }
   };
 
@@ -181,8 +263,13 @@ export function JobsPage() {
 
       {/* Lista de Vagas */}
       <div className="space-y-3 md:space-y-4">
-        {!isLoading && filteredJobs.map((job) => (
-          <Card key={job.id} className="hover:shadow-lg transition-shadow">
+        {!isLoading && filteredJobs.map((job) => {
+          const isApplied = appliedJobs.includes(job.id);
+          return (
+          <Card
+            key={job.id}
+            className={`hover:shadow-lg transition-shadow ${isApplied ? 'border-green-500/60 bg-green-50/40 dark:bg-green-950/20' : ''}`}
+          >
             <CardHeader className="pb-3">
               <div className="flex items-start justify-between gap-2">
                 <div className="min-w-0 flex-1">
@@ -237,14 +324,24 @@ export function JobsPage() {
                   onClick={() => handleApply(job)}
                   className="w-full h-9 md:h-10 text-sm md:text-base"
                   size="lg"
+                  disabled={isApplied || applyingJobId === job.id}
                 >
-                  Candidatar-se
+                  {isApplied ? 'Candidatado' : applyingJobId === job.id ? 'Enviando...' : 'Candidatar-se'}
                 </Button>
               </div>
             </CardContent>
           </Card>
-        ))}
+        );
+        })}
       </div>
+
+      <input
+        ref={resumeInputRef}
+        type="file"
+        accept=".pdf,.doc,.docx"
+        onChange={handleResumeSelected}
+        className="hidden"
+      />
 
       {!isLoading && filteredJobs.length === 0 && (
         <Card>
