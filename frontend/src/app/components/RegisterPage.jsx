@@ -112,6 +112,8 @@ export function RegisterPage() {
       userData.resumeUrl = formData.resume ? URL.createObjectURL(formData.resume) : undefined;
       userData.completedCourses = [];
       userData.appliedJobs = [];
+      userData.enrolledCourses = [];
+      userData.jobApplications = [];
       userData.points = 0;
       userData.badges = [];
       userData.jobTypes = formData.jobTypes;

@@ -65,24 +65,28 @@ Uma aplicação desktop completa desenvolvida com React, Electron e Tailwind CSS
 
 ### Passos
 
-```bash
+```powershell
 # Clone o repositório
 git clone [url-do-repositorio]
 
-# Entre no diretório
-cd carreira-hub
+# Entre no diretório do app (monorepo)
+cd "C:\Users\a92207984\Desktop\Projeto feito com Valnei e Wesley\app-Desigualdade-02"
 
 # Instale as dependências
 npm install
 
-# Execute em modo desenvolvimento web
+# Executar backend + frontend juntos (concurrently)
 npm run dev
 
-# Execute como aplicação Electron
-npm run electron:dev
+# Ou execute separadamente em dois terminais
+# Terminal 1 — backend (Express + SQLite)
+cd "C:\Users\a92207984\Desktop\Projeto feito com Valnei e Wesley\app-Desigualdade-02\backend"
+npm run start
 
-# Build para produção
-npm run electron:build
+# Terminal 2 — frontend (Vite, sem Electron)
+cd "C:\Users\a92207984\Desktop\Projeto feito com Valnei e Wesley\app-Desigualdade-02\frontend"
+$env:DISABLE_ELECTRON='true'
+npx vite
 ```
 
 ## 🎯 Como Usar

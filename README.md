@@ -430,10 +430,10 @@ Para dúvidas sobre o sistema:
 
 
 cd "C:\Users\a92207984\Desktop\Projeto feito com Valnei e Wesley\app-Desigualdade-02\backend"
-node index.js
+npm run start
 
 cd "C:\Users\a92207984\Desktop\Projeto feito com Valnei e Wesley\app-Desigualdade-02\frontend"
-$env:DISABLE_ELECTRON="true"
+$env:DISABLE_ELECTRON='true'
 npx vite
 
 O frontend inicia em http://localhost:5173 (ou 5174)

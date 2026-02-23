@@ -1,9 +1,10 @@
-import { useMemo } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/app/components/ui/card';
 import { Button } from '@/app/components/ui/button';
 import { Progress } from '@/app/components/ui/progress';
 import { Badge } from '@/app/components/ui/badge';
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/app/components/ui/dialog';
 import { useUser } from '@/app/contexts/UserContext';
 import { ROLES } from '@/app/constants/roles';
 import { mockTimeline, mockAlerts } from '@/app/data/mockData';
@@ -26,17 +27,66 @@ import {
   Clock,
   UserCheck,
   Mail,
-  Plus
+  Plus,
+  ExternalLink,
+  Info
 } from 'lucide-react';
 
 export function Dashboard() {
   const { user } = useUser();
+
+  const [openCourseDialog, setOpenCourseDialog] = useState(false);
+  const [openJobDialog, setOpenJobDialog] = useState(false);
+  const [selectedJobId, setSelectedJobId] = useState<string | null>(null);
+  const [selectedCourseId, setSelectedCourseId] = useState<string | null>(null);
+  const [lessonIndex, setLessonIndex] = useState(0);
+  const [lessonCompleted, setLessonCompleted] = useState(false);
 
   if (!user) return null;
 
   const currentStage = mockTimeline.find(t => t.status === 'in-progress');
   const isCourseProvider = user?.role === ROLES.COURSE_PROVIDER;
   const isCompany = user?.role === ROLES.COMPANY;
+  const enrolledCourses = Array.isArray(user?.enrolledCourses) ? user.enrolledCourses : [];
+  const rawJobApplications = Array.isArray(user?.jobApplications) ? user.jobApplications : [];
+  const [jobApplications, setJobApplications] = useState(rawJobApplications);
+
+  // Sincroniza candidaturas sempre que mudam no usuário ou ao abrir o modal (garante dados mais recentes do localStorage)
+  useEffect(() => {
+    setJobApplications(rawJobApplications);
+  }, [rawJobApplications]);
+
+  useEffect(() => {
+    if (!openJobDialog || typeof window === 'undefined') return;
+    try {
+      const saved = localStorage.getItem('currentUser');
+      if (!saved) return;
+      const parsed = JSON.parse(saved);
+      if (Array.isArray(parsed?.jobApplications)) {
+        setJobApplications(parsed.jobApplications);
+        if (!selectedJobId && parsed.jobApplications.length) {
+          setSelectedJobId(parsed.jobApplications[0].id);
+        }
+      }
+    } catch (err) {
+      console.warn('Não foi possível ler candidaturas do storage', err);
+    }
+  }, [openJobDialog, selectedJobId]);
+
+  const selectedJob = jobApplications.find((j: any) => j.id === selectedJobId) || jobApplications[0];
+
+  const activeCourse = enrolledCourses[0];
+  const activeJob = jobApplications[0];
+
+  const selectedCourse = enrolledCourses.find((c: any) => c.id === selectedCourseId) || activeCourse;
+  const lessons = (selectedCourse?.lessons && selectedCourse.lessons.length)
+    ? selectedCourse.lessons
+    : [
+        { id: 'l1', title: 'Introdução', duration: '08:30' },
+        { id: 'l2', title: 'Módulo 1 · Conceitos', duration: '12:10' },
+        { id: 'l3', title: 'Módulo 2 · Prática', duration: '15:45' },
+      ];
+  const currentLesson = lessons[Math.min(lessonIndex, lessons.length - 1)];
 
   const storagePrefix = user?.id ? `course_provider_${user.id}` : 'course_provider';
   const providerData = useMemo(() => {
@@ -796,6 +846,91 @@ export function Dashboard() {
         </CardContent>
       </Card>
 
+      {/* Últimas inscrições (curso e vaga) */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 md:gap-4">
+        <Card className="bg-gradient-to-br from-sky-50/70 to-background">
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <div>
+              <CardTitle className="text-sm font-medium">Curso inscrito</CardTitle>
+              <CardDescription className="text-xs">Seu último curso</CardDescription>
+            </div>
+            <BookOpen className="h-4 w-4 text-muted-foreground" />
+          </CardHeader>
+          <CardContent className="space-y-2">
+            {activeCourse ? (
+              <>
+                <div className="flex items-start justify-between gap-2">
+                  <div className="min-w-0">
+                    <p className="font-medium text-sm truncate">{activeCourse.title}</p>
+                    <p className="text-xs text-muted-foreground">{activeCourse.area}</p>
+                  </div>
+                  <Badge variant="secondary" className="text-[11px]">
+                    {activeCourse.status || 'Inscrição enviada'}
+                  </Badge>
+                </div>
+                <div className="flex items-center justify-between text-xs text-muted-foreground">
+                  <span>Início: {activeCourse.startDate || 'a confirmar'}</span>
+                  <span>Progresso: {activeCourse.progress ?? 0}%</span>
+                </div>
+                <Button variant="outline" size="sm" className="w-full h-9 text-xs md:text-sm" onClick={() => setOpenCourseDialog(true)}>
+                  <Info className="h-3 w-3 mr-2" /> Ver detalhes
+                </Button>
+              </>
+            ) : (
+              <div className="space-y-2">
+                <p className="text-sm text-muted-foreground">Nenhum curso inscrito ainda.</p>
+                <Link to="/cursos">
+                  <Button size="sm" className="w-full h-9 text-xs md:text-sm">
+                    <ExternalLink className="h-3 w-3 mr-2" /> Encontrar cursos
+                  </Button>
+                </Link>
+              </div>
+            )}
+          </CardContent>
+        </Card>
+
+        <Card className="bg-gradient-to-br from-amber-50/70 to-background">
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <div>
+              <CardTitle className="text-sm font-medium">Vaga em andamento</CardTitle>
+              <CardDescription className="text-xs">Última candidatura</CardDescription>
+            </div>
+            <Briefcase className="h-4 w-4 text-muted-foreground" />
+          </CardHeader>
+          <CardContent className="space-y-2">
+            {activeJob ? (
+              <>
+                <div className="flex items-start justify-between gap-2">
+                  <div className="min-w-0">
+                    <p className="font-medium text-sm truncate">{activeJob.title}</p>
+                    <p className="text-xs text-muted-foreground">{activeJob.company}</p>
+                  </div>
+                  <Badge variant="secondary" className="text-[11px]">
+                    {activeJob.status || 'Candidatura enviada'}
+                  </Badge>
+                </div>
+                <div className="flex items-center justify-between text-xs text-muted-foreground">
+                  <span>{activeJob.location || 'Local não informado'}</span>
+                  <span>Tipo: {activeJob.type || '—'}</span>
+                </div>
+                <Button variant="outline" size="sm" className="w-full h-9 text-xs md:text-sm" onClick={() => setOpenJobDialog(true)}>
+                  <Info className="h-3 w-3 mr-2" /> Ver andamento
+                </Button>
+              </>
+            ) : (
+              <div className="space-y-2">
+                <p className="text-sm text-muted-foreground">Nenhuma candidatura enviada ainda.</p>
+                <Link to="/vagas">
+                  <Button size="sm" className="w-full h-9 text-xs md:text-sm">
+                    <ExternalLink className="h-3 w-3 mr-2" /> Buscar vagas
+                  </Button>
+                </Link>
+              </div>
+            )}
+          </CardContent>
+        </Card>
+      </div>
+
       {/* Status da Candidatura */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 md:gap-4">
         <Card>
@@ -930,6 +1065,200 @@ export function Dashboard() {
           </div>
         </CardContent>
       </Card>
+
+      {/* Modais de detalhe */}
+      <Dialog open={openCourseDialog} onOpenChange={(open) => {
+        setOpenCourseDialog(open);
+        if (open && enrolledCourses.length && !selectedCourseId) {
+          setSelectedCourseId(enrolledCourses[0].id);
+          setLessonIndex(0);
+          setLessonCompleted(false);
+        }
+      }}>
+        <DialogContent className="max-w-lg">
+          <DialogHeader>
+            <DialogTitle>Detalhes do curso inscrito</DialogTitle>
+            <DialogDescription>Veja o status da sua matrícula e próximos passos.</DialogDescription>
+          </DialogHeader>
+          {enrolledCourses.length ? (
+            <div className="space-y-4 text-sm max-h-[72vh] overflow-y-auto pr-1">
+              {/* Cabeçalho do curso */}
+              <div className="space-y-2">
+                <div className="flex items-center justify-between">
+                  <div className="flex flex-col">
+                    <span className="text-xs text-muted-foreground">Curso selecionado</span>
+                    <span className="font-semibold text-base truncate">{selectedCourse?.title || 'Selecione um curso'}</span>
+                  </div>
+                  <Badge variant="secondary">{selectedCourse?.status || 'Inscrição enviada'}</Badge>
+                </div>
+                <div>
+                  <Progress value={selectedCourse?.progress ?? 0} className="h-2" />
+                  <div className="flex justify-between text-xs text-muted-foreground mt-1">
+                    <span>{selectedCourse?.area || 'Área'}</span>
+                    <span>{selectedCourse?.progress ?? 0}%</span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Layout EAD */}
+              <div className="grid grid-cols-1 md:grid-cols-4 gap-3">
+                {/* Sidebar de módulos/aulas */}
+                <div className="md:col-span-1 border rounded-md p-2 space-y-2">
+                  <p className="text-xs font-semibold uppercase text-muted-foreground">Módulos e aulas</p>
+                  <div className="space-y-2">
+                    {lessons.map((lesson: any, idx: number) => (
+                      <button
+                        key={lesson.id || idx}
+                        className={`w-full text-left text-xs p-2 rounded-md border ${idx === lessonIndex ? 'bg-primary/10 border-primary' : 'border-border'}`}
+                        onClick={() => {
+                          setLessonIndex(idx);
+                          setLessonCompleted(false);
+                        }}
+                      >
+                        <div className="flex items-center justify-between gap-2">
+                          <span className="truncate">{lesson.title}</span>
+                          <span className="text-[11px] text-muted-foreground">{lesson.duration}</span>
+                        </div>
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Área principal */}
+                <div className="md:col-span-3 space-y-3">
+                  <div className="aspect-video w-full bg-muted rounded-md flex items-center justify-center text-muted-foreground text-sm border">
+                    Player de vídeo (aula: {currentLesson?.title || '—'})
+                  </div>
+
+                  <div className="flex items-center gap-2">
+                    <Button size="sm" variant="outline" disabled={lessonIndex === 0} onClick={() => { setLessonIndex(Math.max(0, lessonIndex - 1)); setLessonCompleted(false); }}>Aula anterior</Button>
+                    <Button size="sm" variant="outline" disabled={lessonIndex >= lessons.length - 1} onClick={() => { setLessonIndex(Math.min(lessons.length - 1, lessonIndex + 1)); setLessonCompleted(false); }}>Próxima aula</Button>
+                    <Button size="sm" onClick={() => setLessonCompleted(true)}>
+                      {lessonCompleted ? 'Marcada como concluída' : 'Marcar concluída'}
+                    </Button>
+                  </div>
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                    <div className="border rounded-md p-3 space-y-2">
+                      <p className="text-sm font-semibold flex items-center gap-2">Materiais</p>
+                      <ul className="text-xs text-muted-foreground space-y-1">
+                        <li>• Slides da aula</li>
+                        <li>• PDF de apoio</li>
+                        <li>• Exercícios práticos</li>
+                      </ul>
+                    </div>
+                    <div className="border rounded-md p-3 space-y-2">
+                      <p className="text-sm font-semibold flex items-center gap-2">Comentários</p>
+                      <p className="text-xs text-muted-foreground">Deixe dúvidas ou anotações sobre esta aula.</p>
+                      <Button size="sm" variant="outline">Adicionar comentário</Button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Lista de cursos para trocar seleção */}
+              <div className="space-y-2">
+                <p className="text-xs font-semibold uppercase text-muted-foreground">Seus cursos</p>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
+                  {enrolledCourses.map((course: any) => (
+                    <button
+                      key={course.id}
+                      className={`text-left border rounded-md p-2 text-xs ${selectedCourse?.id === course.id ? 'border-primary bg-primary/5' : 'border-border'}`}
+                      onClick={() => {
+                        setSelectedCourseId(course.id);
+                        setLessonIndex(0);
+                        setLessonCompleted(false);
+                      }}
+                    >
+                      <div className="flex items-center justify-between">
+                        <span className="font-semibold text-sm truncate">{course.title}</span>
+                        <Badge variant="secondary">{course.progress ?? 0}%</Badge>
+                      </div>
+                      <p className="text-muted-foreground mt-1">{course.area || 'Área'}</p>
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              <Link to="/cursos">
+                <Button variant="outline" className="w-full">
+                  <ExternalLink className="h-4 w-4 mr-2" /> Ver cursos
+                </Button>
+              </Link>
+            </div>
+          ) : (
+            <p className="text-sm text-muted-foreground">Nenhum curso selecionado.</p>
+          )}
+        </DialogContent>
+      </Dialog>
+
+      <Dialog open={openJobDialog} onOpenChange={(open) => { setOpenJobDialog(open); if (!open) { setSelectedJobId(null); } }}>
+        <DialogContent className="max-w-lg">
+          <DialogHeader>
+            <DialogTitle>Detalhes da candidatura</DialogTitle>
+            <DialogDescription>Acompanhe em que pé está sua vaga.</DialogDescription>
+          </DialogHeader>
+          {selectedJob ? (
+            <div className="space-y-3 text-sm max-h-80 overflow-y-auto pr-1">
+              <div className="border rounded-md p-3 space-y-2">
+                <div className="flex items-center justify-between">
+                  <span className="font-medium">{selectedJob.title}</span>
+                  <Badge variant="secondary">{selectedJob.status || 'Candidatura enviada'}</Badge>
+                </div>
+                <div className="flex items-center justify-between text-muted-foreground">
+                  <span>Empresa</span>
+                  <span>{selectedJob.company || '—'}</span>
+                </div>
+                <div className="flex items-center justify-between text-muted-foreground">
+                  <span>Local</span>
+                  <span>{selectedJob.location || '—'}</span>
+                </div>
+                <div className="flex items-center justify-between text-muted-foreground">
+                  <span>Tipo</span>
+                  <span>{selectedJob.type || '—'}</span>
+                </div>
+                <div className="flex items-center justify-between text-muted-foreground">
+                  <span>Compatibilidade</span>
+                  <span>{selectedJob.match ? `${selectedJob.match}%` : '—'}</span>
+                </div>
+                <div className="flex items-center justify-between text-muted-foreground">
+                  <span>Faixa salarial</span>
+                  <span>{selectedJob.salary || 'A combinar'}</span>
+                </div>
+              </div>
+
+              {jobApplications.length > 1 && (
+                <div className="space-y-2">
+                  <p className="text-xs font-semibold uppercase text-muted-foreground">Outras candidaturas</p>
+                  <div className="grid gap-2 max-h-40 overflow-y-auto pr-1">
+                    {jobApplications.filter((j: any) => j.id !== selectedJob.id).map((job: any) => (
+                      <button
+                        key={job.id}
+                        className="w-full text-left border rounded-md p-2 text-xs hover:border-primary"
+                        onClick={() => setSelectedJobId(job.id)}
+                      >
+                        <div className="flex items-center justify-between">
+                          <span className="font-semibold truncate">{job.title}</span>
+                          <Badge variant="outline" className="text-[10px]">{job.status || 'Enviada'}</Badge>
+                        </div>
+                        <p className="text-[11px] text-muted-foreground truncate">{job.company || '—'}</p>
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              <Link to="/vagas">
+                <Button variant="outline" className="w-full">
+                  <ExternalLink className="h-4 w-4 mr-2" /> Ver vagas
+                </Button>
+              </Link>
+            </div>
+          ) : (
+            <p className="text-sm text-muted-foreground">Nenhuma candidatura encontrada.</p>
+          )}
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }

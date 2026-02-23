@@ -15,8 +15,15 @@ import { mockCourses } from '@/app/data/mockData';
 import { BookOpen, Calendar, Clock, Users, Filter, FileText, GraduationCap, MessageSquare, Award } from 'lucide-react';
 import { toast } from 'sonner';
 
+const defaultLessonsForCourse = (title: string) => ([
+  { id: 'l1', title: `${title} · Introdução`, duration: '08:30' },
+  { id: 'l2', title: `${title} · Fundamentos`, duration: '12:10' },
+  { id: 'l3', title: `${title} · Projeto prático`, duration: '15:45' },
+]);
+
 export function CoursesPage() {
-  const { user } = useUser();
+  const { user, updateUser } = useUser();
+  const [overlayMessage, setOverlayMessage] = useState<string | null>(null);
   const [filter, setFilter] = useState({
     area: 'all',
     free: 'all',
@@ -162,8 +169,28 @@ export function CoursesPage() {
     return true;
   });
 
-  const handleEnroll = (courseTitle: string) => {
-    toast.success(`Inscrição realizada em "${courseTitle}"!`);
+  const handleEnroll = (course: any) => {
+    const previous = Array.isArray(user?.enrolledCourses) ? user.enrolledCourses : [];
+    if (previous.some((c: any) => c.id === course.id)) {
+      setOverlayMessage('Você já se inscreveu neste curso.');
+      return;
+    }
+
+    toast.success(`Inscrição realizada em "${course.title}"!`);
+    if (updateUser) {
+      const enrollment = {
+        id: course.id,
+        title: course.title,
+        area: course.area,
+        startDate: course.startDate,
+        duration: course.duration,
+        status: 'Inscrição enviada',
+        progress: 0,
+        lessons: defaultLessonsForCourse(course.title),
+      };
+      const nextCourses = [enrollment, ...previous.filter((c: any) => c.id !== course.id)];
+      updateUser({ enrolledCourses: nextCourses });
+    }
   };
 
   if (isCourseProvider) {
@@ -776,6 +803,15 @@ export function CoursesPage() {
 
   return (
     <div className="space-y-4 md:space-y-6">
+      {overlayMessage && (
+        <div className="fixed inset-x-0 top-4 z-50 flex justify-center px-4">
+          <div className="bg-background border shadow-lg rounded-lg p-4 w-full max-w-sm text-center space-y-2">
+            <p className="text-sm font-medium">{overlayMessage}</p>
+            <Button size="sm" onClick={() => setOverlayMessage(null)}>Fechar</Button>
+          </div>
+        </div>
+      )}
+
       <div>
         <h1 className="text-2xl md:text-3xl font-bold">Cursos Disponíveis</h1>
         <p className="text-sm md:text-base text-muted-foreground">Aprenda novas habilidades e impulsione sua carreira</p>
@@ -872,7 +908,7 @@ export function CoursesPage() {
                 </div>
 
                 <Button
-                  onClick={() => handleEnroll(course.title)}
+                  onClick={() => handleEnroll(course)}
                   className="w-full mt-3 md:mt-4 h-9 md:h-10 text-sm"
                 >
                   Inscrever-se em 1 clique
